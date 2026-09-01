@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetAware · Simulador de vida estudiantil</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --bg-soft: #111b31;
+      --panel: #17243b;
+      --panel-2: #1d2d48;
+      --line: #2b3d5d;
+      --text: #edf4ff;
+      --muted: #9aabc5;
+      --blue: #4e8cff;
+      --blue-soft: #193b76;
+      --green: #35d39a;
+      --green-soft: #123d37;
+      --red: #ff6b78;
+      --red-soft: #4a202d;
+      --yellow: #f6c85f;
+      --shadow: 0 18px 45px rgba(0, 0, 0, .2);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--bg); }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% -10%, rgba(78,140,255,.2), transparent 35rem),
+        var(--bg);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    .hidden { display: none !important; }
+    .app { min-height: 100vh; }
+    .topbar {
+      align-items: center; border-bottom: 1px solid rgba(255,255,255,.08); display: flex;
+      justify-content: space-between; min-height: 68px; padding: 15px 5vw;
+    }
+    .brand { align-items: center; display: flex; gap: 11px; }
+    .brand-mark { align-items: center; background: var(--blue); border-radius: 12px; color: #fff; display: flex; font-weight: 900; height: 36px; justify-content: center; width: 36px; }
+    .brand-name { font-size: 1.02rem; font-weight: 800; letter-spacing: -.03em; }
+    .brand-sub { color: var(--muted); font-size: .74rem; }
+    .status-pill { background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 99px; color: var(--muted); font-size: .76rem; padding: 6px 11px; }
+    .shell { margin: 0 auto; max-width: 1260px; padding: 42px 5vw 70px; }
+    .screen { animation: rise .35s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .intro { margin: 0 auto; max-width: 760px; text-align: center; }
+    .eyebrow { color: var(--blue); font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(2.25rem, 5vw, 4.2rem); letter-spacing: -.065em; line-height: .98; margin-bottom: 18px; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); letter-spacing: -.045em; line-height: 1.08; }
+    h3 { font-size: 1rem; margin-bottom: 6px; }
+    .lede { color: var(--muted); font-size: 1.05rem; margin: 0 auto 28px; max-width: 650px; }
+    .intro-card { background: linear-gradient(140deg, rgba(78,140,255,.15), rgba(255,255,255,.035)); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); margin: 30px auto 0; max-width: 630px; padding: 28px; text-align: left; }
+    .intro-card p { color: var(--muted); }
+    .principles { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); margin: 22px 0 28px; }
+    .principle { background: rgba(10,17,32,.42); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 14px; }
+    .principle strong { display: block; font-size: .84rem; margin-bottom: 2px; }
+    .principle span { color: var(--muted); font-size: .77rem; }
+    .button { border: 0; border-radius: 12px; font-weight: 800; padding: 12px 16px; transition: transform .2s, filter .2s, background .2s; }
+    .button:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+    .button.primary { background: var(--blue); color: #fff; }
+    .button.secondary { background: rgba(255,255,255,.08); color: var(--text); }
+    .button.ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+    .button.danger { background: var(--red); color: #1b0910; }
+    .wide { width: 100%; }
+
+    .setup { margin: 0 auto; max-width: 720px; }
+    .setup-head { margin-bottom: 26px; text-align: center; }
+    .setup-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 26px; }
+    .field { margin-bottom: 18px; }
+    label { color: var(--muted); display: block; font-size: .82rem; font-weight: 700; margin-bottom: 7px; }
+    input { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; color: var(--text); outline: 0; padding: 12px 13px; width: 100%; }
+    input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(78,140,255,.17); }
+    .choice-grid { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
+    .choice { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 13px; color: var(--muted); padding: 13px; text-align: left; }
+    .choice[aria-pressed="true"] { background: var(--blue-soft); border-color: var(--blue); color: var(--text); }
+    .choice strong, .choice span { display: block; }
+    .choice strong { margin-bottom: 2px; }
+    .choice span { font-size: .78rem; }
+    .setup-footer { align-items: center; border-top: 1px solid var(--line); display: flex; gap: 12px; justify-content: space-between; margin-top: 25px; padding-top: 20px; }
+
+    .game-head { align-items: end; display: flex; justify-content: space-between; margin-bottom: 22px; }
+    .game-head h1 { font-size: clamp(1.9rem, 4vw, 3.2rem); margin-bottom: 6px; }
+    .week-label { color: var(--muted); margin: 0; }
+    .week-meter { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; height: 7px; margin-top: 15px; overflow: hidden; }
+    .week-meter > span { background: linear-gradient(90deg, var(--blue), #8baeff); display: block; height: 100%; transition: width .4s ease; }
+    .game-grid { display: grid; gap: 22px; grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr); }
+    .column { min-width: 0; }
+    .card { background: rgba(23,36,59,.92); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 20px; }
+    .card + .card { margin-top: 17px; }
+    .card-head { align-items: start; display: flex; justify-content: space-between; margin-bottom: 16px; }
+    .card-head p { color: var(--muted); font-size: .83rem; margin-bottom: 0; }
+    .stats-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+    .stat { background: rgba(10,17,32,.35); border: 1px solid rgba(255,255,255,.07); border-radius: 13px; padding: 13px; }
+    .stat-label { color: var(--muted); font-size: .72rem; }
+    .stat-value { display: block; font-size: 1.3rem; font-weight: 850; letter-spacing: -.04em; margin: 2px 0 8px; }
+    .bar { background: #0c1527; border-radius: 99px; height: 6px; overflow: hidden; }
+    .bar span { background: var(--blue); border-radius: inherit; display: block; height: 100%; transition: width .4s ease; }
+    .bar.green span { background: var(--green); }
+    .bar.yellow span { background: var(--yellow); }
+    .bar.red span { background: var(--red); }
+    .risk { align-items: center; display: flex; gap: 8px; margin-top: 13px; }
+    .risk-dot { background: var(--green); border-radius: 50%; height: 9px; width: 9px; }
+    .risk-dot.medium { background: var(--yellow); }
+    .risk-dot.critical { background: var(--red); }
+    .risk-text { color: var(--muted); font-size: .78rem; }
+    .action-list { display: grid; gap: 11px; }
+    .action { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; color: var(--text); display: grid; gap: 3px; padding: 15px; text-align: left; transition: border-color .2s, transform .2s, background .2s; }
+    .action:hover:not(:disabled) { background: #172b4b; border-color: var(--blue); transform: translateY(-2px); }
+    .action .action-top { align-items: center; display: flex; justify-content: space-between; }
+    .action .cost { color: var(--yellow); font-size: .78rem; font-weight: 800; }
+    .action small { color: var(--muted); font-size: .78rem; }
+    .odds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+    .odd { border-radius: 6px; font-size: .68rem; font-weight: 800; padding: 3px 6px; }
+    .odd.good { background: var(--green-soft); color: var(--green); }
+    .odd.neutral { background: #463c19; color: var(--yellow); }
+    .odd.bad { background: var(--red-soft); color: var(--red); }
+    .feedback { background: linear-gradient(135deg, rgba(78,140,255,.13), rgba(23,36,59,.7)); border: 1px solid rgba(78,140,255,.3); border-radius: 14px; padding: 17px; }
+    .feedback.success { border-color: rgba(53,211,154,.42); }
+    .feedback.loss { border-color: rgba(255,107,120,.45); }
+    .feedback-title { font-size: 1.02rem; font-weight: 850; margin-bottom: 4px; }
+    .feedback p { color: var(--muted); font-size: .84rem; margin: 0 0 14px; }
+    .feedback .button { font-size: .8rem; padding: 9px 12px; }
+    .timeline { max-height: 750px; overflow: auto; padding-right: 5px; }
+    .timeline-empty { color: var(--muted); font-size: .84rem; padding: 8px 0; }
+    .event { border-left: 2px solid var(--line); padding: 0 0 18px 17px; position: relative; }
+    .event:last-child { padding-bottom: 4px; }
+    .event::before { background: var(--blue); border: 3px solid var(--panel); border-radius: 50%; content: ""; height: 8px; left: -7px; position: absolute; top: 3px; width: 8px; }
+    .event.loss::before { background: var(--red); }
+    .event.win::before { background: var(--green); }
+    .event-top { align-items: center; display: flex; gap: 8px; justify-content: space-between; }
+    .event-week { color: var(--muted); font-size: .72rem; }
+    .event-action { font-weight: 800; }
+    .event-result { font-size: .8rem; margin-top: 5px; }
+    .event-result.positive { color: var(--green); }
+    .event-result.negative { color: var(--red); }
+    .event-balance { color: var(--muted); font-size: .75rem; }
+    .risk-note { color: var(--muted); font-size: .75rem; margin: 13px 0 0; }
+
+    .modal-backdrop { align-items: center; background: rgba(4,8,16,.78); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 20; }
+    .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 25px 90px rgba(0,0,0,.5); max-width: 510px; padding: 25px; width: 100%; }
+    .modal h2 { font-size: 1.6rem; margin-bottom: 10px; }
+    .modal p { color: var(--muted); }
+    .modal-actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; margin-top: 22px; }
+    .probability-box { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 13px; display: grid; gap: 8px; margin: 17px 0; padding: 14px; }
+    .prob-line { align-items: center; display: flex; font-size: .8rem; justify-content: space-between; }
+    .prob-line span:last-child { font-weight: 850; }
+    .crisis-icon { align-items: center; background: var(--red-soft); border-radius: 13px; color: var(--red); display: flex; font-size: 1.5rem; height: 45px; justify-content: center; margin-bottom: 15px; width: 45px; }
+
+    .debrief { margin: 0 auto; max-width: 900px; }
+    .debrief-head { margin-bottom: 28px; text-align: center; }
+    .debrief-head h1 { font-size: clamp(2.2rem, 5vw, 3.7rem); }
+    .result-grid { display: grid; gap: 11px; grid-template-columns: repeat(3, 1fr); margin-bottom: 18px; }
+    .result-stat { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 17px; }
+    .result-stat .value { display: block; font-size: 1.5rem; font-weight: 850; letter-spacing: -.04em; }
+    .result-stat .label { color: var(--muted); font-size: .74rem; margin: 0; }
+    .verdict { background: linear-gradient(135deg, rgba(255,107,120,.17), rgba(74,32,45,.45)); border: 1px solid rgba(255,107,120,.42); border-radius: 18px; margin: 18px 0; padding: 22px; }
+    .verdict h2 { color: #ffd9dd; font-size: 1.25rem; margin-bottom: 9px; }
+    .verdict p { color: #ffd0d5; margin-bottom: 0; }
+    .reflection { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 21px; }
+    .reflection p { color: var(--muted); }
+    .reflection textarea { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; color: var(--text); min-height: 100px; padding: 12px; resize: vertical; width: 100%; }
+    .debrief-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+    .sr-only { clip: rect(0 0 0 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
+    @media (max-width: 820px) {
+      .game-grid { grid-template-columns: 1fr; }
+      .timeline { max-height: none; }
+      .game-head { align-items: start; flex-direction: column; gap: 15px; }
+    }
+    @media (max-width: 560px) {
+      .shell { padding-top: 30px; }
+      .principles, .choice-grid, .result-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .setup-footer, .debrief-actions { align-items: stretch; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">B</div><div><div class="brand-name">BetAware</div><div class="brand-sub">Simulador de vida estudiantil</div></div></div>
+      <div class="status-pill" id="headerStatus">Modo simulación</div>
+    </header>
+
+    <main class="shell">
+      <section class="screen" id="introScreen">
+        <div class="intro">
+          <div class="eyebrow">Juegos Aplicados · Serious game</div>
+          <h1>Tu semestre.<br><span style="color:var(--blue)">Tus decisiones.</span></h1>
+          <p class="lede">Administrá tu plata, cuidá tu bienestar y atravesá 12 semanas. Las decisiones tienen consecuencias, pero no siempre se ven en el momento.</p>
+          <div class="intro-card">
+            <h3>Una simulación sobre el riesgo</h3>
+            <p>BetAware no te dice qué pensar: pone en tus manos una economía acotada, eventos inesperados y una apuesta con probabilidades transparentes. Observá qué hace tu estrategia con el tiempo.</p>
+            <div class="principles">
+              <div class="principle"><strong>12 semanas</strong><span>Un cuatrimestre completo</span></div>
+              <div class="principle"><strong>Decisiones reales</strong><span>Estudio, ahorro o apuesta</span></div>
+              <div class="principle"><strong>Auditoría final</strong><span>Revisá tu trayectoria</span></div>
+            </div>
+            <button class="button primary wide" id="startButton">Comenzar simulación</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen hidden" id="setupScreen">
+        <div class="setup">
+          <div class="setup-head"><div class="eyebrow">Antes de empezar</div><h2>Definí tu punto de partida</h2><p class="lede">No existe una estrategia perfecta. Elegí cómo querés entrar a este semestre.</p></div>
+          <div class="setup-card">
+            <div class="field"><label for="playerName">¿Cómo te llamás?</label><input id="playerName" maxlength="24" placeholder="Tu nombre o apodo" autocomplete="off"></div>
+            <div class="field"><label>Tu prioridad inicial</label><div class="choice-grid" id="priorityChoices">
+              <button class="choice" data-priority="study" aria-pressed="true"><strong>Rendir mejor</strong><span>Empezás con +10% académico</span></button>
+              <button class="choice" data-priority="balance" aria-pressed="false"><strong>Buscar equilibrio</strong><span>Empezás con +5% bienestar</span></button>
+              <button class="choice" data-priority="risk" aria-pressed="false"><strong>Probar suerte</strong><span>Empezás con $50 extra en mano</span></button>
+            </div></div>
+            <div class="setup-footer"><span style="color:var(--muted);font-size:.8rem">Tu saldo inicial será de $1.000 + $200 de ahorro.</span><button class="button primary" id="confirmSetup">Entrar al semestre</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen hidden" id="gameScreen">
+        <div class="game-head"><div><div class="eyebrow">Trayectoria de <span id="playerNameLabel">estudiante</span></div><h1 id="weekTitle">Semana 1 de 12</h1><p class="week-label" id="weekSubtitle">Tu primera semana empieza ahora.</p><div class="week-meter"><span id="weekProgress" style="width:8.33%"></span></div></div><button class="button ghost" id="restartTop">Reiniciar</button></div>
+        <div class="game-grid">
+          <div class="column">
+            <div class="card"><div class="card-head"><div><h3>Tu estado actual</h3><p>Lo que está en juego esta semana</p></div><span class="status-pill" id="riskBadge">Riesgo bajo</span></div>
+              <div class="stats-grid">
+                <div class="stat"><span class="stat-label">Dinero disponible</span><strong class="stat-value" id="walletValue">$1.000</strong><div class="bar green"><span id="walletBar" style="width:50%"></span></div></div>
+                <div class="stat"><span class="stat-label">Fondo de ahorro</span><strong class="stat-value" id="savingsValue">$200</strong><div class="bar green"><span id="savingsBar" style="width:20%"></span></div></div>
+                <div class="stat"><span class="stat-label">Necesidades académicas</span><strong class="stat-value" id="studyValue">50%</strong><div class="bar"><span id="studyBar" style="width:50%"></span></div></div>
+                <div class="stat"><span class="stat-label">Bienestar / salud mental</span><strong class="stat-value" id="wellbeingValue">75%</strong><div class="bar yellow"><span id="wellbeingBar" style="width:75%"></span></div></div>
+              </div>
+              <div class="risk"><span class="risk-dot" id="riskDot"></span><span class="risk-text" id="riskText">Exposición al riesgo: baja · 0 apuestas</span></div>
+            </div>
+            <div class="card" id="decisionCard"><div class="card-head"><div><h3>Elegí tu acción principal</h3><p>Tenés una decisión por semana.</p></div><span style="color:var(--yellow);font-size:.8rem;font-weight:800">Presupuesto libre: <span id="freeBudget">$500</span></span></div>
+              <div class="action-list">
+                <button class="action" data-action="study"><div class="action-top"><strong>Invertir en estudio</strong><span class="cost">−$250</span></div><small>Materiales y apoyo para llegar mejor a los finales.</small></button>
+                <button class="action" data-action="save"><div class="action-top"><strong>Ahorrar para emergencias</strong><span class="cost">$150 al fondo</span></div><small>Reservá liquidez hoy para una crisis futura.</small></button>
+                <button class="action" data-action="bet"><div class="action-top"><strong>Apostar en el partido</strong><span class="cost">−$250</span></div><small>El resultado no depende de tu intuición.</small><div class="odds"><span class="odd good">10% · +$500</span><span class="odd neutral">20% · +$100</span><span class="odd bad">70% · −$250</span></div></button>
+              </div>
+              <p class="risk-note">La apuesta tiene retorno esperado de $160 por cada $250 jugados: una pérdida esperada de $90.</p>
+            </div>
+            <div class="card"><div class="card-head"><div><h3>Registro de la semana</h3><p id="feedbackHint">Elegí una acción para ver su impacto.</p></div></div><div id="feedback" class="feedback"><div class="feedback-title">Tu próxima decisión cambia la trayectoria</div><p>El resultado de hoy se va a sumar al historial y a tus métricas finales.</p></div></div>
+          </div>
+          <aside class="column"><div class="card"><div class="card-head"><div><h3>Tu trayectoria</h3><p>El historial nunca se borra.</p></div><span class="status-pill" id="historyCount">0 semanas</span></div><div class="timeline" id="timeline"><div class="timeline-empty">Todavía no hay decisiones registradas.</div></div></div></aside>
+        </div>
+      </section>
+
+      <section class="screen hidden" id="debriefScreen"><div class="debrief"><div class="debrief-head"><div class="eyebrow">Fin del cuatrimestre</div><h1>La simulación terminó.</h1><p class="lede" id="debriefIntro">Ahora podés mirar la trayectoria completa, no solo los momentos más intensos.</p></div><div class="result-grid" id="resultGrid"></div><div class="verdict" id="verdict"></div><div class="reflection"><h3>Auditoría cognitiva</h3><p>¿Qué decisión te gustaría repetir y cuál te gustaría observar con más cuidado en una próxima partida?</p><label class="sr-only" for="reflectionText">Tu reflexión</label><textarea id="reflectionText" placeholder="Escribí una idea breve…"></textarea></div><div class="debrief-actions"><button class="button secondary" id="copySummary">Copiar resumen</button><button class="button primary" id="restartButton">Jugar otra estrategia</button></div></div></section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop" role="presentation"><div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div></div>
+
+  <script>
+    (() => {
+      "use strict";
+      const $ = (selector) => document.querySelector(selector);
+      const $$ = (selector) => [...document.querySelectorAll(selector)];
+      const money = (value) => `$${Math.round(value).toLocaleString("es-AR")}`;
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      const state = {
+        name: "Estudiante", week: 1, wallet: 1000, savings: 200, study: 50, wellbeing: 75,
+        bets: 0, wins: 0, losses: 0, wagered: 0, recovered: 0, risk: 0, debt: 0,
+        priority: "study", history: [], pending: false, currentEvent: null
+      };
+      const introScreen = $("#introScreen"), setupScreen = $("#setupScreen"), gameScreen = $("#gameScreen"), debriefScreen = $("#debriefScreen");
+
+      function showScreen(screen) { [introScreen, setupScreen, gameScreen, debriefScreen].forEach((item) => item.classList.toggle("hidden", item !== screen)); window.scrollTo({ top: 0, behavior: "smooth" }); }
+      function formatSigned(value) { return `${value >= 0 ? "+" : "−"}${money(Math.abs(value))}`; }
+      function resetState() { Object.assign(state, { name: "Estudiante", week: 1, wallet: 1000, savings: 200, study: 50, wellbeing: 75, bets: 0, wins: 0, losses: 0, wagered: 0, recovered: 0, risk: 0, debt: 0, priority: "study", history: [], pending: false, currentEvent: null }); }
+      function setPriority(value) { state.priority = value; $$("[data-priority]").forEach((button) => button.setAttribute("aria-pressed", button.dataset.priority === value ? "true" : "false")); }
+      function startSetup() { showScreen(setupScreen); $("#playerName").focus(); }
+      function startGame() {
+        state.name = $("#playerName").value.trim() || "Estudiante";
+        if (state.priority === "study") state.study += 10;
+        if (state.priority === "balance") state.wellbeing += 5;
+        state.wallet = state.priority === "risk" ? 1050 : 1000;
+        $("#playerNameLabel").textContent = state.name;
+        showScreen(gameScreen); render(); maybeCrisis();
+      }
+      function riskInfo() { if (state.risk >= 6) return ["crítico", "critical"]; if (state.risk >= 3) return ["medio", "medium"]; return ["bajo", "low"]; }
+      function render() {
+        $("#weekTitle").textContent = `Semana ${state.week} de 12`;
+        $("#weekSubtitle").textContent = state.week === 1 ? "Tu primera semana empieza ahora." : "Cada elección deja una huella en tu trayectoria.";
+        $("#weekProgress").style.width = `${state.week / 12 * 100}%`;
+        $("#walletValue").textContent = money(state.wallet); $("#savingsValue").textContent = money(state.savings);
+        $("#studyValue").textContent = `${state.study}%`; $("#wellbeingValue").textContent = `${state.wellbeing}%`;
+        $("#walletBar").style.width = `${clamp(state.wallet / 2000 * 100, 0, 100)}%`; $("#savingsBar").style.width = `${clamp(state.savings / 1000 * 100, 0, 100)}%`;
+        $("#studyBar").style.width = `${state.study}%`; $("#wellbeingBar").style.width = `${state.wellbeing}%`;
+        const [risk, riskClass] = riskInfo(); $("#riskBadge").textContent = `Riesgo ${risk}`; $("#riskDot").className = `risk-dot ${riskClass === "low" ? "" : riskClass}`;
+        $("#riskText").textContent = `Exposición al riesgo: ${risk} · ${state.bets} ${state.bets === 1 ? "apuesta" : "apuestas"}`;
+        $("#freeBudget").textContent = money(Math.max(0, state.wallet - 500)); $("#historyCount").textContent = `${state.history.length} ${state.history.length === 1 ? "semana" : "semanas"}`;
+        $("#headerStatus").textContent = `Semana ${state.week} / 12`;
+        renderHistory();
+      }
+      function renderHistory() {
+        const timeline = $("#timeline");
+        if (!state.history.length) { timeline.innerHTML = '<div class="timeline-empty">Todavía no hay decisiones registradas.</div>'; return; }
+        timeline.innerHTML = state.history.slice().reverse().map((item) => `<div class="event ${item.kind}"><div class="event-top"><span class="event-action">${item.action}</span><span class="event-week">Semana ${item.week}</span></div><div class="event-result ${item.delta >= 0 ? "positive" : "negative"}">${item.result}</div><div class="event-balance">Saldo: ${money(item.wallet)} · Ahorro: ${money(item.savings)}</div></div>`).join("");
+      }
+      function setFeedback(title, body, kind = "") { const feedback = $("#feedback"); feedback.className = `feedback ${kind}`; feedback.innerHTML = `<div class="feedback-title">${title}</div><p>${body}</p><button class="button primary" id="continueButton">Continuar</button>`; $("#feedbackHint").textContent = "Tu decisión ya forma parte de la trayectoria."; $("#continueButton").addEventListener("click", continueWeek); }
+      function chooseAction(action) {
+        if (state.pending) return;
+        const costs = { study: 250, save: 150, bet: 250 };
+        if (state.wallet < costs[action]) { setFeedback("No alcanza el dinero disponible", `Necesitás ${money(costs[action])} para esa acción. Podés elegir otra estrategia esta semana.`, "loss"); return; }
+        state.pending = true; $$(".action").forEach((button) => button.disabled = true);
+        if (action === "study") resolveStudy(); else if (action === "save") resolveSave(); else resolveBet();
+        render();
+      }
+      function addHistory(action, result, delta, kind) { state.history.push({ week: state.week, action, result, delta, wallet: state.wallet, savings: state.savings, kind }); }
+      function resolveStudy() { state.wallet -= 250; state.study = clamp(state.study + 15, 0, 100); state.wellbeing = clamp(state.wellbeing + 5, 0, 100); addHistory("Invertir en estudio", "−$250 · +15% académico", -250, "win"); tone("success"); setFeedback("Invertiste en tu trayectoria", "Tu bienestar también mejora: el beneficio no aparece en la billetera, pero sí en tus opciones futuras.", "success"); }
+      function resolveSave() { state.wallet -= 150; state.savings += 150; state.wellbeing = clamp(state.wellbeing + 5, 0, 100); addHistory("Ahorrar para emergencias", "−$150 líquidos · +$150 ahorro", 0, "win"); tone("success"); setFeedback("Construiste un colchón", "Ahorrar reduce tu vulnerabilidad ante los imprevistos que pueden aparecer más adelante.", "success"); }
+      function resolveBet() {
+        state.wallet -= 250; state.bets++; state.wagered += 250; state.risk++;
+        const roll = Math.random(); let result, delta, kind;
+        if (roll < .10) { state.wallet += 750; state.recovered += 750; state.wins++; state.wellbeing = clamp(state.wellbeing + 15, 0, 100); result = "Ganancia grande · +$500 netos"; delta = 500; kind = "win"; tone("jackpot"); setFeedback("Ganaste fuerte esta vez", "La euforia es real. También lo es que la exposición al riesgo acaba de subir.", "success"); }
+        else if (roll < .30) { state.wallet += 350; state.recovered += 350; state.wins++; state.wellbeing = clamp(state.wellbeing + 15, 0, 100); result = "Ganancia pequeña · +$100 netos"; delta = 100; kind = "win"; tone("success"); setFeedback("Una ganancia pequeña", "El refuerzo intermitente funciona así: un resultado positivo vuelve atractiva la próxima apuesta.", "success"); }
+        else { state.losses++; state.wellbeing = clamp(state.wellbeing - 15, 0, 100); result = "Pérdida total · −$250"; delta = -250; kind = "loss"; tone("loss"); setFeedback("Perdiste la apuesta", "La pérdida pesa más cuando el objetivo se desplaza: ahora aparece la tentación de recuperar.", "loss"); setTimeout(() => openChasingModal(), 220); }
+        addHistory("Apostar en el partido", result, delta, kind);
+      }
+      function continueWeek() { closeModal(); state.pending = false; if (state.week >= 12) { showDebrief(); return; } state.week++; state.wallet += 500; if (state.debt) state.wallet -= Math.min(state.wallet, state.debt); state.debt = Math.max(0, state.debt - 40); $$(".action").forEach((button) => button.disabled = false); render(); setFeedback("Nueva semana", "Recibiste $1.000 y se descontaron $500 de gastos fijos. Elegí cómo usar tus próximos $500 libres."); $("#feedback").className = "feedback"; maybeCrisis(); }
+      function maybeCrisis() { if ([4, 7, 10].includes(state.week) && Math.random() < .72) { const events = [{ title: "Se rompió tu notebook", body: "La reparación urgente cuesta $350. ¿Cómo vas a resolver este imprevisto?", cost: 350 }, { title: "Bibliografía obligatoria", body: "Para rendir el final necesitás comprar material por $250.", cost: 250 }]; state.currentEvent = events[Math.floor(Math.random() * events.length)]; setTimeout(() => openCrisisModal(), 300); } }
+      function openCrisisModal() { const event = state.currentEvent; const canSave = state.savings >= event.cost, canWallet = state.wallet >= event.cost; openModal(`<div class="crisis-icon">!</div><h2 id="modalTitle">${event.title}</h2><p>${event.body}</p><div class="probability-box"><div class="prob-line"><span>Fondo de ahorro</span><strong>${money(state.savings)}</strong></div><div class="prob-line"><span>Dinero disponible</span><strong>${money(state.wallet)}</strong></div></div><div class="modal-actions"><button class="button ghost" id="crisisItem">Vender un ítem</button><button class="button secondary" id="crisisLoan">Pedir préstamo</button><button class="button primary" id="crisisPay" ${canSave || canWallet ? "" : "disabled"}>Pagar ${money(event.cost)}</button></div>`); $("#crisisPay").addEventListener("click", () => resolveCrisis("pay")); $("#crisisLoan").addEventListener("click", () => resolveCrisis("loan")); $("#crisisItem").addEventListener("click", () => resolveCrisis("item")); }
+      function resolveCrisis(mode) { const event = state.currentEvent; if (mode === "pay") { if (state.savings >= event.cost) state.savings -= event.cost; else state.wallet -= event.cost; setFeedback("Crisis resuelta con tus fondos", "Tu bienestar se mantiene estable. El ahorro funcionó como red de seguridad.", "success"); }
+        if (mode === "loan") { state.debt += Math.round(event.cost * 1.35); setFeedback("El préstamo te dio aire", `La deuda ahora es de ${money(state.debt)} y se descuenta de tus ingresos futuros.`, "loss"); }
+        if (mode === "item") { state.wellbeing = clamp(state.wellbeing - 25, 0, 100); state.study = clamp(state.study - 20, 0, 100); setFeedback("Vendiste un ítem para seguir", "Evitaste la deuda, pero el costo aparece en tu bienestar y en tus necesidades académicas.", "loss"); }
+        closeModal(); state.currentEvent = null; render(); }
+      function openChasingModal() { if (!state.pending) return; const available = state.wallet >= 300; openModal(`<h2 id="modalTitle">¿Querés recuperar lo perdido?</h2><p>Una app de apuestas detectó tu pérdida y ofrece una “cuota especial”. Este es el momento de la persecución de pérdidas: jugar más para volver al punto de partida.</p><div class="probability-box"><div class="prob-line"><span>Doble o nada</span><strong>50% · +$300 / 50% · −$300</strong></div><div class="prob-line"><span>Tu saldo actual</span><strong>${money(state.wallet)}</strong></div></div><div class="modal-actions"><button class="button ghost" id="skipChasing">Cerrar oferta</button><button class="button danger" id="acceptChasing" ${available ? "" : "disabled"}>Apostar $300 ahora</button></div>`); $("#skipChasing").addEventListener("click", closeModal); $("#acceptChasing").addEventListener("click", resolveChasing); }
+      function resolveChasing() { state.wallet -= 300; state.bets++; state.wagered += 300; state.risk += 2; const won = Math.random() < .5; if (won) { state.wallet += 600; state.recovered += 600; state.wins++; addHistory("Persecución de pérdidas", "Ganaste el doble o nada · +$300 netos", 300, "win"); tone("jackpot"); setFeedback("Recuperaste esta vez", "La sensación de alivio puede hacer que la próxima persecución parezca una buena idea. Observá el costo acumulado en el cierre.", "success"); } else { state.losses++; state.wellbeing = clamp(state.wellbeing - 10, 0, 100); addHistory("Persecución de pérdidas", "Doble o nada perdido · −$300", -300, "loss"); tone("loss"); setFeedback("La persecución agravó el déficit", "La pérdida no se recuperó: aumentó la exposición y redujo tu margen de maniobra.", "loss"); } closeModal(); render(); }
+      function openModal(content) { $("#modal").innerHTML = content; $("#modalBackdrop").classList.remove("hidden"); }
+      function closeModal() { $("#modalBackdrop").classList.add("hidden"); $("#modal").innerHTML = ""; }
+      function showDebrief() { showScreen(debriefScreen); $("#headerStatus").textContent = "Simulación completa"; const net = state.recovered - state.wagered; $("#debriefIntro").textContent = `${state.name}, estas son las huellas acumuladas de tus 12 semanas.`; $("#resultGrid").innerHTML = `<div class="result-stat"><span class="value">${money(state.wallet)}</span><p class="label">Dinero final en mano</p></div><div class="result-stat"><span class="value">${money(state.savings)}</span><p class="label">Fondo de ahorro</p></div><div class="result-stat"><span class="value">${state.study}%</span><p class="label">Necesidades académicas</p></div><div class="result-stat"><span class="value">${state.wellbeing}%</span><p class="label">Bienestar final</p></div><div class="result-stat"><span class="value">${money(state.wagered)}</span><p class="label">Total apostado</p></div><div class="result-stat"><span class="value">${money(state.recovered)}</span><p class="label">Total recuperado</p></div>`; $("#verdict").innerHTML = `<h2>La memoria recuerda la euforia. La planilla recuerda todo.</h2><p>Ganaste <strong>${state.wins}</strong> de <strong>${state.bets}</strong> apuestas. En total apostaste ${money(state.wagered)} y recuperaste ${money(state.recovered)}: tu resultado neto en apuestas fue <strong>${formatSigned(net)}</strong>. El retorno esperado de la apuesta original era negativo desde el primer intento.</p>`; tone("success"); }
+      function copySummary() { const net = state.recovered - state.wagered; const text = `BetAware · ${state.name}\nDinero final: ${money(state.wallet)} · Ahorro: ${money(state.savings)}\nApuestas: ${state.wins} ganadas de ${state.bets}\nNeto de apuestas: ${formatSigned(net)}`; navigator.clipboard?.writeText(text).then(() => { $("#copySummary").textContent = "Resumen copiado"; setTimeout(() => $("#copySummary").textContent = "Copiar resumen", 1600); }).catch(() => { $("#copySummary").textContent = "No disponible"; }); }
+      let audioContext;
+      function tone(type) { try { audioContext ||= new (window.AudioContext || window.webkitAudioContext)(); const now = audioContext.currentTime; const notes = type === "loss" ? [150, 100] : type === "jackpot" ? [440, 660, 880, 1040] : [520, 700]; notes.forEach((frequency, index) => { const oscillator = audioContext.createOscillator(), gain = audioContext.createGain(); oscillator.frequency.value = frequency; oscillator.type = type === "loss" ? "sine" : "triangle"; gain.gain.setValueAtTime(.0001, now + index * .09); gain.gain.exponentialRampToValueAtTime(.07, now + index * .09 + .02); gain.gain.exponentialRampToValueAtTime(.0001, now + index * .09 + .13); oscillator.connect(gain).connect(audioContext.destination); oscillator.start(now + index * .09); oscillator.stop(now + index * .09 + .15); }); } catch (_) {} }
+      function restart() { resetState(); $("#playerName").value = ""; setPriority("study"); $$(".action").forEach((button) => button.disabled = false); $("#feedback").className = "feedback"; showScreen(introScreen); }
+      $("#startButton").addEventListener("click", startSetup); $("#confirmSetup").addEventListener("click", startGame); $("#restartButton").addEventListener("click", restart); $("#restartTop").addEventListener("click", restart); $("#copySummary").addEventListener("click", copySummary); $("#modalBackdrop").addEventListener("click", (event) => { if (event.target === $("#modalBackdrop")) closeModal(); });
+      $$("[data-priority]").forEach((button) => button.addEventListener("click", () => setPriority(button.dataset.priority))); $$("[data-action]").forEach((button) => button.addEventListener("click", () => chooseAction(button.dataset.action)));
+    })();
+  </script>
+</body>
+</html>

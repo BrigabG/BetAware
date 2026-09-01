@@ -142,12 +142,9 @@
     .bet-animation small { color: var(--muted); font-size: .78rem; }
     @keyframes reel { from { transform: translateY(-5px) rotate(-4deg); } to { transform: translateY(5px) rotate(4deg); } }
     .timeline { max-height: 750px; overflow: auto; padding-right: 5px; }
-    .history-card > summary { align-items: start; cursor: pointer; display: flex; justify-content: space-between; list-style: none; }
-    .history-card > summary::-webkit-details-marker { display: none; }
-    .history-card > summary::after { color: var(--muted); content: "⌄"; font-size: 1.1rem; margin-left: 9px; }
-    .history-card[open] > summary { margin-bottom: 16px; }
-    .history-card[open] > summary::after { transform: rotate(180deg); }
+    .history-head { align-items: start; display: flex; justify-content: space-between; margin-bottom: 16px; }
     .history-copy { color: var(--muted); display: block; font-size: .83rem; }
+    .history-rail { display: none; }
     .timeline-empty { color: var(--muted); font-size: .84rem; padding: 8px 0; }
     .event { border-left: 2px solid var(--line); padding: 0 0 18px 17px; position: relative; }
     .event:last-child { padding-bottom: 4px; }
@@ -210,8 +207,8 @@
       #decisionCard .card-head { align-items: center; margin-bottom: 9px; } #decisionCard .card-head h3 { font-size: .85rem; margin: 0; } #decisionCard .card-head p { display: none; } #decisionCard .card-head > span { font-size: .65rem !important; }
       .action-list { gap: 7px; grid-template-columns: repeat(2, minmax(0, 1fr)); } .action { gap: 4px; min-height: 82px; padding: 9px; } .action .action-top { align-items: start; flex-direction: column; gap: 3px; } .action-name { align-items: start; font-size: .72rem; gap: 5px; line-height: 1.15; } .action-icon { font-size: 1rem; margin-top: 1px; } .action .cost { font-size: .62rem; } .action small { display: none; } .action[data-action="bet"] { min-height: 96px; } .odds { gap: 3px; margin-top: 1px; } .odd { font-size: .55rem; padding: 2px 3px; }
       .risk-note { font-size: .61rem; line-height: 1.25; margin: 8px 0 0; } .consequence-note { font-size: .63rem; line-height: 1.25; margin: 8px 0 0; padding: 6px 7px; }
-      #feedbackCard { background: transparent; border: 0; box-shadow: none; padding: 0; } #feedbackCard .card-head { display: none; } .feedback { padding: 8px 10px; } .feedback-title { font-size: .78rem; } .feedback p { font-size: .66rem; line-height: 1.25; margin-bottom: 7px; } .feedback .button { font-size: .7rem; padding: 7px 9px; }
-      .history-card { padding: 10px 11px; } .history-card > summary { align-items: center; } .history-card h3 { font-size: .78rem; margin: 0; } .history-copy { display: none; } .history-card[open] > summary { margin-bottom: 10px; } .timeline { max-height: 280px; }
+      #feedbackCard { background: transparent; border: 0; box-shadow: none; padding: 0; } #feedbackCard.mobile-hidden { display: none; } #feedbackCard .card-head { display: none; } .feedback { padding: 8px 10px; } .feedback-title { font-size: .78rem; } .feedback p { font-size: .66rem; line-height: 1.25; margin-bottom: 7px; } .feedback .button { font-size: .7rem; padding: 7px 9px; }
+      .history-card { padding: 8px 11px; } .history-head { align-items: center; margin-bottom: 6px; } .history-card h3 { font-size: .72rem; margin: 0; } .history-copy { display: none; } .timeline { max-height: none; overflow: visible; padding: 0; } .timeline-empty, .event { display: none; } .history-rail { display: grid; gap: 3px; grid-template-columns: repeat(12, minmax(0, 1fr)); } .history-slot { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-size: .52rem; font-weight: 800; line-height: 1; padding: 5px 0; text-align: center; } .history-slot.win { background: var(--green-soft); border-color: rgba(53,211,154,.5); color: var(--green); } .history-slot.loss { background: var(--red-soft); border-color: rgba(255,107,120,.5); color: var(--red); } .history-slot.pending { opacity: .45; }
       .setup-footer, .debrief-actions { align-items: stretch; flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) { .bet-reel { animation: none; } }
@@ -293,7 +290,7 @@
             </div>
             <div class="card" id="feedbackCard"><div class="card-head"><div><h3>Registro de la semana</h3><p id="feedbackHint">Elegí una acción para ver su impacto.</p></div></div><div id="feedback" class="feedback"><div class="feedback-title">Tu próxima decisión cambia la trayectoria</div><p>El resultado de hoy se va a sumar al historial y a tus métricas finales.</p></div></div>
           </div>
-          <aside class="column"><details class="card history-card" id="historyDetails"><summary><span><h3>Tu trayectoria</h3><span class="history-copy">El historial nunca se borra.</span></span><span class="status-pill" id="historyCount">0 semanas</span></summary><div class="timeline" id="timeline"><div class="timeline-empty">Todavía no hay decisiones registradas.</div></div></details></aside>
+          <aside class="column"><div class="card history-card"><div class="history-head"><span><h3>Tu trayectoria</h3><span class="history-copy">El historial nunca se borra.</span></span><span class="status-pill" id="historyCount">0 semanas</span></div><div class="timeline" id="timeline"><div class="timeline-empty">Todavía no hay decisiones registradas.</div></div></div></aside>
         </div>
       </section>
 
@@ -328,9 +325,8 @@
         if (state.priority === "balance") state.wellbeing += 5;
         state.wallet = state.priority === "risk" ? 1050 : 1000;
         $("#playerNameLabel").textContent = state.name;
-        showScreen(gameScreen); syncHistoryFold(); render(); maybeCrisis();
+        showScreen(gameScreen); $("#feedbackCard").classList.add("mobile-hidden"); render(); maybeCrisis();
       }
-      function syncHistoryFold() { $("#historyDetails").open = !window.matchMedia("(max-width: 560px)").matches; }
       function riskInfo() { if (state.risk >= 6) return ["crítico", "critical"]; if (state.risk >= 3) return ["medio", "medium"]; return ["bajo", "low"]; }
       function render() {
         $("#weekTitle").textContent = `Semana ${state.week} de 12`;
@@ -350,11 +346,15 @@
       }
       function renderHistory() {
         const timeline = $("#timeline");
+        if (window.matchMedia("(max-width: 560px)").matches) {
+          timeline.innerHTML = `<div class="history-rail" aria-label="Trayectoria de las 12 semanas">${Array.from({ length: 12 }, (_, index) => { const week = index + 1, events = state.history.filter((item) => item.week === week), latest = events[events.length - 1], label = latest ? `Semana ${week}: ${events.map((item) => `${item.action}. ${item.result}`).join(" ")}` : `Semana ${week}: sin registrar`; return `<span class="history-slot ${latest ? latest.kind : "pending"}" aria-label="${label}" title="${label}">${week}</span>`; }).join("")}</div>`;
+          return;
+        }
         if (!state.history.length) { timeline.innerHTML = '<div class="timeline-empty">Todavía no hay decisiones registradas.</div>'; return; }
         timeline.innerHTML = state.history.slice().reverse().map((item) => `<div class="event ${item.kind}"><div class="event-top"><span class="event-action">${item.action}</span><span class="event-week">Semana ${item.week}</span></div><div class="event-result ${item.delta >= 0 ? "positive" : "negative"}">${item.result}</div><div class="event-balance">Saldo: ${money(item.wallet)} · Ahorro: ${money(item.savings)}</div></div>`).join("");
       }
-      function setFeedback(title, body, kind = "", allowContinue = true) { const feedback = $("#feedback"); feedback.className = `feedback ${kind}`; feedback.innerHTML = `<div class="feedback-title">${title}</div><p>${body}</p>${allowContinue ? '<button class="button primary" id="continueButton">Continuar</button>' : ""}`; $("#feedbackHint").textContent = allowContinue ? "Tu decisión ya forma parte de la trayectoria." : "Todavía tenés que elegir una acción."; if (allowContinue) $("#continueButton").addEventListener("click", continueWeek); }
-      function showReadyFeedback() { setFeedback("Elegí tu acción principal", "No se puede avanzar sin decidir: cada semana deja una consecuencia en la trayectoria.", "", false); }
+      function setFeedback(title, body, kind = "", allowContinue = true) { const feedback = $("#feedback"); $("#feedbackCard").classList.remove("mobile-hidden"); feedback.className = `feedback ${kind}`; feedback.innerHTML = `<div class="feedback-title">${title}</div><p>${body}</p>${allowContinue ? '<button class="button primary" id="continueButton">Continuar</button>' : ""}`; $("#feedbackHint").textContent = allowContinue ? "Tu decisión ya forma parte de la trayectoria." : "Todavía tenés que elegir una acción."; if (allowContinue) $("#continueButton").addEventListener("click", continueWeek); }
+      function showReadyFeedback() { setFeedback("Elegí tu acción principal", "No se puede avanzar sin decidir: cada semana deja una consecuencia en la trayectoria.", "", false); $("#feedbackCard").classList.add("mobile-hidden"); }
       function strainInfo() { if (state.risk >= 6) return { study: 5, save: 0, label: "La exposición crítica reduce tu disponibilidad: estudio rinde +5% y ahorrar ya no mejora el bienestar esta semana." }; if (state.risk >= 3) return { study: 10, save: 2, label: "La exposición acumulada fragmenta tu semana: estudio rinde +10% y ahorrar suma +2% de bienestar." }; return { study: 15, save: 5, label: "" }; }
       function chooseAction(action) {
         if (state.pending) return;

@@ -6,6 +6,8 @@ Prototipo web jugable para Juegos Aplicados. Serious game sobre ludopatía, econ
 
 Abrir `index.html` en un navegador moderno. El prototipo usa HTML, CSS y JavaScript vanilla dentro de un único archivo, sin dependencias externas.
 
+Los íconos se integran como SVG propios, adaptados de [Lucide](https://lucide.dev/), bajo licencia ISC. No se descarga ninguna biblioteca en tiempo de juego.
+
 ## Intención de diseño
 
 La experiencia toma como referencia la estructura de simulador por turnos de [Copero](https://copero.com.ar/juegos/simulador-carrera): una introducción breve, una configuración inicial y una secuencia de decisiones con trayectoria acumulada. La interfaz, el texto y las reglas son propios de BetAware.

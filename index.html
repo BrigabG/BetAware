@@ -100,7 +100,9 @@
     .card-head p { color: var(--muted); font-size: .83rem; margin-bottom: 0; }
     .stats-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
     .stat { background: rgba(10,17,32,.35); border: 1px solid rgba(255,255,255,.07); border-radius: 13px; padding: 13px; }
-    .stat-icon { display: inline-flex; font-size: .95rem; margin-right: 5px; }
+    .icon { display: inline-block; fill: none; flex: 0 0 auto; height: 1em; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; vertical-align: -.16em; width: 1em; }
+    .icon-sprite { height: 0; overflow: hidden; position: absolute; width: 0; }
+    .stat-icon { color: var(--blue); display: inline-flex; font-size: .95rem; margin-right: 5px; }
     .stat-label { color: var(--muted); font-size: .72rem; }
     .stat-value { display: block; font-size: 1.3rem; font-weight: 850; letter-spacing: -.04em; margin: 2px 0 8px; }
     .bar { background: #0c1527; border-radius: 99px; height: 6px; overflow: hidden; }
@@ -117,6 +119,10 @@
     .action { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; color: var(--text); display: grid; gap: 3px; padding: 15px; text-align: left; transition: border-color .2s, transform .2s, background .2s; }
     .action:hover:not(:disabled) { background: #172b4b; border-color: var(--blue); transform: translateY(-2px); }
     .action .action-top { align-items: center; display: flex; justify-content: space-between; }
+    .action-name { align-items: center; display: flex; gap: 8px; }
+    .action-icon { color: var(--blue); font-size: 1.05rem; }
+    .action[data-action="save"] .action-icon, .action[data-action="support"] .action-icon { color: var(--green); }
+    .action[data-action="bet"] .action-icon { color: var(--red); }
     .action .cost { color: var(--yellow); font-size: .78rem; font-weight: 800; }
     .action small { color: var(--muted); font-size: .78rem; }
     .odds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
@@ -136,6 +142,12 @@
     .bet-animation small { color: var(--muted); font-size: .78rem; }
     @keyframes reel { from { transform: translateY(-5px) rotate(-4deg); } to { transform: translateY(5px) rotate(4deg); } }
     .timeline { max-height: 750px; overflow: auto; padding-right: 5px; }
+    .history-card > summary { align-items: start; cursor: pointer; display: flex; justify-content: space-between; list-style: none; }
+    .history-card > summary::-webkit-details-marker { display: none; }
+    .history-card > summary::after { color: var(--muted); content: "⌄"; font-size: 1.1rem; margin-left: 9px; }
+    .history-card[open] > summary { margin-bottom: 16px; }
+    .history-card[open] > summary::after { transform: rotate(180deg); }
+    .history-copy { color: var(--muted); display: block; font-size: .83rem; }
     .timeline-empty { color: var(--muted); font-size: .84rem; padding: 8px 0; }
     .event { border-left: 2px solid var(--line); padding: 0 0 18px 17px; position: relative; }
     .event:last-child { padding-bottom: 4px; }
@@ -184,22 +196,38 @@
     }
     @media (max-width: 560px) {
       .topbar { min-height: 55px; padding: 10px 14px; } .brand-sub { display: none; }
-      .shell { padding: 16px 14px 48px; } .game-head { margin-bottom: 12px; } .game-head h1 { font-size: 1.7rem; }
+      .shell { padding: 12px 12px 32px; } .game-head { align-items: center; display: grid; gap: 0 8px; grid-template-columns: 1fr auto; margin-bottom: 9px; } .game-head .eyebrow, .week-label { display: none; } .game-head h1 { font-size: 1rem; margin: 0; } .week-meter { height: 5px; margin-top: 6px; } .restart-label { display: none; } .game-head .button { align-items: center; display: inline-flex; font-size: 1rem; justify-content: center; padding: 7px; }
       .principles, .choice-grid, .result-grid { grid-template-columns: 1fr; }
-      .status-card { backdrop-filter: blur(12px); position: sticky; top: 7px; z-index: 5; }
-      .status-card .card-head { align-items: center; margin-bottom: 9px; } .status-card .card-head p { display: none; }
+      .game-grid { gap: 9px; }
+      .status-card { backdrop-filter: blur(12px); }
+      .status-card .card-head { align-items: center; margin-bottom: 7px; } .status-card .card-head h3 { font-size: .8rem; margin: 0; } .status-card .card-head p { display: none; }
+      .status-pill { font-size: .63rem; padding: 4px 7px; }
       .stats-grid { gap: 6px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .stat { padding: 8px 4px; text-align: center; } .stat-icon { display: block; margin: 0 0 1px; }
-      .stat-label, .stat .bar { display: none; } .stat-value { font-size: .81rem; margin: 0; white-space: nowrap; }
-      .risk { margin-top: 8px; } .risk-text { font-size: .72rem; }
-      .card { border-radius: 14px; padding: 14px; } .card + .card { margin-top: 12px; }
-      .action { padding: 13px; } .timeline { max-height: 340px; }
+      .stat { padding: 6px 3px; text-align: center; } .stat-icon { display: flex; font-size: 1rem; justify-content: center; margin: 0 0 2px; }
+      .stat-label { display: block; font-size: .57rem; line-height: 1.1; min-height: 1.2em; } .stat .bar { display: none; } .stat-value { font-size: .75rem; margin: 1px 0 0; white-space: nowrap; }
+      .risk { margin-top: 7px; } .risk-text { font-size: .66rem; }
+      .card { border-radius: 14px; padding: 11px; } .card + .card { margin-top: 9px; }
+      #decisionCard .card-head { align-items: center; margin-bottom: 9px; } #decisionCard .card-head h3 { font-size: .85rem; margin: 0; } #decisionCard .card-head p { display: none; } #decisionCard .card-head > span { font-size: .65rem !important; }
+      .action-list { gap: 7px; grid-template-columns: repeat(2, minmax(0, 1fr)); } .action { gap: 4px; min-height: 82px; padding: 9px; } .action .action-top { align-items: start; flex-direction: column; gap: 3px; } .action-name { align-items: start; font-size: .72rem; gap: 5px; line-height: 1.15; } .action-icon { font-size: 1rem; margin-top: 1px; } .action .cost { font-size: .62rem; } .action small { display: none; } .action[data-action="bet"] { min-height: 96px; } .odds { gap: 3px; margin-top: 1px; } .odd { font-size: .55rem; padding: 2px 3px; }
+      .risk-note { font-size: .61rem; line-height: 1.25; margin: 8px 0 0; } .consequence-note { font-size: .63rem; line-height: 1.25; margin: 8px 0 0; padding: 6px 7px; }
+      #feedbackCard { background: transparent; border: 0; box-shadow: none; padding: 0; } #feedbackCard .card-head { display: none; } .feedback { padding: 8px 10px; } .feedback-title { font-size: .78rem; } .feedback p { font-size: .66rem; line-height: 1.25; margin-bottom: 7px; } .feedback .button { font-size: .7rem; padding: 7px 9px; }
+      .history-card { padding: 10px 11px; } .history-card > summary { align-items: center; } .history-card h3 { font-size: .78rem; margin: 0; } .history-copy { display: none; } .history-card[open] > summary { margin-bottom: 10px; } .timeline { max-height: 280px; }
       .setup-footer, .debrief-actions { align-items: stretch; flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) { .bet-reel { animation: none; } }
   </style>
 </head>
 <body>
+  <!-- Iconos adaptados de Lucide (ISC): https://lucide.dev -->
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><path d="M16 13h.01"/><path d="M19 10h-5a2 2 0 0 0 0 4h5Z"/></symbol>
+    <symbol id="icon-piggy-bank" viewBox="0 0 24 24"><path d="M19 5c-1.5 0-2.8.7-3.6 1.8A7.8 7.8 0 0 0 12 6C7.6 6 4 8.7 4 12s3.6 6 8 6h1.5c1.4 0 2.5-1.1 2.5-2.5V15h1l2-2v-4h-1.7c.5-1.2 1.1-2.4 1.7-4Z"/><path d="M4 12H2"/><path d="M16 7h.01"/><path d="M8 16v1"/></symbol>
+    <symbol id="icon-book-open" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4v14a4 4 0 0 0-4-4Z"/><path d="M21 18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4v14a4 4 0 0 1 4-4Z"/></symbol>
+    <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M2 9.5a5.5 5.5 0 0 1 9.6-3.7L12 6.2l.4-.4A5.5 5.5 0 0 1 22 9.5C22 15 12 21 12 21S2 15 2 9.5Z"/></symbol>
+    <symbol id="icon-hand-heart" viewBox="0 0 24 24"><path d="M11 5.5A3.5 3.5 0 0 1 17 8c0 2-3 4-3 4s-3-2-3-4a3.5 3.5 0 0 1 0-2.5Z"/><path d="M3 15.5 7.5 20a2 2 0 0 0 1.4.6H17a3 3 0 0 0 2.1-.9l2.2-2.2a1.8 1.8 0 0 0-2.5-2.5L17 16.8V14a2 2 0 0 0-2-2h-4l-2.2-2.2A2 2 0 0 0 6 12.6V14l-3-3"/></symbol>
+    <symbol id="icon-dices" viewBox="0 0 24 24"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 2.82 3.26 3.26a2 2 0 0 1 0 2.83l-6.27 6.27a2 2 0 0 1-2.83 0l-3.26-3.26a2 2 0 0 1 0-2.83l6.27-6.27a2 2 0 0 1 2.83 0Z"/><path d="M6 18h.01M10 14h.01M15 6h.01M18 9h.01"/></symbol>
+    <symbol id="icon-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+  </svg>
   <div class="app">
     <header class="topbar">
       <div class="brand"><div class="brand-mark" aria-hidden="true">B</div><div><div class="brand-name">BetAware</div><div class="brand-sub">Simulador de vida estudiantil</div></div></div>
@@ -241,31 +269,31 @@
       </section>
 
       <section class="screen hidden" id="gameScreen">
-        <div class="game-head"><div><div class="eyebrow">Trayectoria de <span id="playerNameLabel">estudiante</span></div><h1 id="weekTitle">Semana 1 de 12</h1><p class="week-label" id="weekSubtitle">Tu primera semana empieza ahora.</p><div class="week-meter"><span id="weekProgress" style="width:8.33%"></span></div></div><button class="button ghost" id="restartTop">Reiniciar</button></div>
+        <div class="game-head"><div><div class="eyebrow">Trayectoria de <span id="playerNameLabel">estudiante</span></div><h1 id="weekTitle">Semana 1 de 12</h1><p class="week-label" id="weekSubtitle">Tu primera semana empieza ahora.</p><div class="week-meter"><span id="weekProgress" style="width:8.33%"></span></div></div><button class="button ghost" id="restartTop" aria-label="Reiniciar simulación"><svg class="icon" aria-hidden="true"><use href="#icon-rotate-ccw"></use></svg><span class="restart-label"> Reiniciar</span></button></div>
         <div class="game-grid">
           <div class="column">
             <div class="card status-card"><div class="card-head"><div><h3>Tu estado actual</h3><p>Lo que está en juego esta semana</p></div><span class="status-pill" id="riskBadge">Riesgo bajo</span></div>
               <div class="stats-grid">
-                <div class="stat"><span class="stat-icon" aria-hidden="true">$</span><span class="stat-label">Dinero disponible</span><strong class="stat-value" id="walletValue">$1.000</strong><div class="bar green"><span id="walletBar" style="width:50%"></span></div></div>
-                <div class="stat"><span class="stat-icon" aria-hidden="true">▣</span><span class="stat-label">Fondo de ahorro</span><strong class="stat-value" id="savingsValue">$200</strong><div class="bar green"><span id="savingsBar" style="width:20%"></span></div></div>
-                <div class="stat"><span class="stat-icon" aria-hidden="true">⌁</span><span class="stat-label">Necesidades académicas</span><strong class="stat-value" id="studyValue">50%</strong><div class="bar"><span id="studyBar" style="width:50%"></span></div></div>
-                <div class="stat"><span class="stat-icon" aria-hidden="true">♥</span><span class="stat-label">Bienestar / salud mental</span><strong class="stat-value" id="wellbeingValue">75%</strong><div class="bar yellow"><span id="wellbeingBar" style="width:75%"></span></div></div>
+                <div class="stat"><span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-wallet"></use></svg></span><span class="stat-label">Billetera</span><strong class="stat-value" id="walletValue">$1.000</strong><div class="bar green"><span id="walletBar" style="width:50%"></span></div></div>
+                <div class="stat"><span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-piggy-bank"></use></svg></span><span class="stat-label">Ahorro</span><strong class="stat-value" id="savingsValue">$200</strong><div class="bar green"><span id="savingsBar" style="width:20%"></span></div></div>
+                <div class="stat"><span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-book-open"></use></svg></span><span class="stat-label">Estudio</span><strong class="stat-value" id="studyValue">50%</strong><div class="bar"><span id="studyBar" style="width:50%"></span></div></div>
+                <div class="stat"><span class="stat-icon" aria-hidden="true"><svg class="icon"><use href="#icon-heart"></use></svg></span><span class="stat-label">Bienestar</span><strong class="stat-value" id="wellbeingValue">75%</strong><div class="bar yellow"><span id="wellbeingBar" style="width:75%"></span></div></div>
               </div>
               <div class="risk"><span class="risk-dot" id="riskDot"></span><span class="risk-text" id="riskText">Exposición al riesgo: baja · 0 apuestas</span></div>
             </div>
             <div class="card" id="decisionCard"><div class="card-head"><div><h3>Elegí tu acción principal</h3><p>Tenés una decisión por semana.</p></div><span style="color:var(--yellow);font-size:.8rem;font-weight:800">Presupuesto libre: <span id="freeBudget">$500</span></span></div>
               <div class="action-list">
-                <button class="action" data-action="study"><div class="action-top"><strong>Invertir en estudio</strong><span class="cost">−$250</span></div><small id="studyActionDetail">Materiales y apoyo para llegar mejor a los finales.</small></button>
-                <button class="action" data-action="save"><div class="action-top"><strong>Ahorrar para emergencias</strong><span class="cost">$150 al fondo</span></div><small id="saveActionDetail">Reservá liquidez hoy para una crisis futura.</small></button>
-                <button class="action" data-action="support"><div class="action-top"><strong>Pedir apoyo y pausar</strong><span class="cost">Sin costo</span></div><small>Frená la escalada, recuperá bienestar y bajá una marca de exposición.</small></button>
-                <button class="action" data-action="bet"><div class="action-top"><strong>Apostar en el partido</strong><span class="cost">−$250</span></div><small>El resultado no depende de tu intuición.</small><div class="odds"><span class="odd good">10% · +$500</span><span class="odd neutral">20% · +$100</span><span class="odd bad">70% · −$250</span></div></button>
+                <button class="action" data-action="study"><div class="action-top"><span class="action-name"><svg class="icon action-icon" aria-hidden="true"><use href="#icon-book-open"></use></svg><strong>Invertir en estudio</strong></span><span class="cost">−$250</span></div><small id="studyActionDetail">Materiales y apoyo para llegar mejor a los finales.</small></button>
+                <button class="action" data-action="save"><div class="action-top"><span class="action-name"><svg class="icon action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg><strong>Ahorrar para emergencias</strong></span><span class="cost">$150 al fondo</span></div><small id="saveActionDetail">Reservá liquidez hoy para una crisis futura.</small></button>
+                <button class="action" data-action="support"><div class="action-top"><span class="action-name"><svg class="icon action-icon" aria-hidden="true"><use href="#icon-hand-heart"></use></svg><strong>Pedir apoyo y pausar</strong></span><span class="cost">Sin costo</span></div><small>Frená la escalada, recuperá bienestar y bajá una marca de exposición.</small></button>
+                <button class="action" data-action="bet"><div class="action-top"><span class="action-name"><svg class="icon action-icon" aria-hidden="true"><use href="#icon-dices"></use></svg><strong>Apostar en el partido</strong></span><span class="cost">−$250</span></div><small>El resultado no depende de tu intuición.</small><div class="odds"><span class="odd good">10% · +$500</span><span class="odd neutral">20% · +$100</span><span class="odd bad">70% · −$250</span></div></button>
               </div>
               <p class="risk-note">La apuesta tiene retorno esperado de $160 por cada $250 jugados: una pérdida esperada de $90.</p>
               <p class="consequence-note hidden" id="consequenceNote"></p>
             </div>
-            <div class="card"><div class="card-head"><div><h3>Registro de la semana</h3><p id="feedbackHint">Elegí una acción para ver su impacto.</p></div></div><div id="feedback" class="feedback"><div class="feedback-title">Tu próxima decisión cambia la trayectoria</div><p>El resultado de hoy se va a sumar al historial y a tus métricas finales.</p></div></div>
+            <div class="card" id="feedbackCard"><div class="card-head"><div><h3>Registro de la semana</h3><p id="feedbackHint">Elegí una acción para ver su impacto.</p></div></div><div id="feedback" class="feedback"><div class="feedback-title">Tu próxima decisión cambia la trayectoria</div><p>El resultado de hoy se va a sumar al historial y a tus métricas finales.</p></div></div>
           </div>
-          <aside class="column"><div class="card"><div class="card-head"><div><h3>Tu trayectoria</h3><p>El historial nunca se borra.</p></div><span class="status-pill" id="historyCount">0 semanas</span></div><div class="timeline" id="timeline"><div class="timeline-empty">Todavía no hay decisiones registradas.</div></div></div></aside>
+          <aside class="column"><details class="card history-card" id="historyDetails"><summary><span><h3>Tu trayectoria</h3><span class="history-copy">El historial nunca se borra.</span></span><span class="status-pill" id="historyCount">0 semanas</span></summary><div class="timeline" id="timeline"><div class="timeline-empty">Todavía no hay decisiones registradas.</div></div></details></aside>
         </div>
       </section>
 
@@ -300,8 +328,9 @@
         if (state.priority === "balance") state.wellbeing += 5;
         state.wallet = state.priority === "risk" ? 1050 : 1000;
         $("#playerNameLabel").textContent = state.name;
-        showScreen(gameScreen); render(); maybeCrisis();
+        showScreen(gameScreen); syncHistoryFold(); render(); maybeCrisis();
       }
+      function syncHistoryFold() { $("#historyDetails").open = !window.matchMedia("(max-width: 560px)").matches; }
       function riskInfo() { if (state.risk >= 6) return ["crítico", "critical"]; if (state.risk >= 3) return ["medio", "medium"]; return ["bajo", "low"]; }
       function render() {
         $("#weekTitle").textContent = `Semana ${state.week} de 12`;

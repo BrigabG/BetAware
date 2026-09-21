@@ -32,12 +32,20 @@
         radial-gradient(circle at 18% -10%, rgba(78,140,255,.2), transparent 35rem),
         var(--bg);
       font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background .45s ease, color .45s ease;
     }
+    body[data-mood="positive"] { --blue: #45d49c; --blue-soft: #164b3e; }
+    body[data-mood="negative"] { --blue: #ff8794; --blue-soft: #5a2635; }
     button, input { font: inherit; }
     button { cursor: pointer; }
     button:disabled { cursor: not-allowed; opacity: .48; }
     .hidden { display: none !important; }
-    .app { min-height: 100vh; }
+    .app { isolation: isolate; min-height: 100vh; position: relative; }
+    .app::before, .app::after { content: ""; inset: 0; pointer-events: none; position: fixed; }
+    .app::before { background: linear-gradient(rgba(11,17,32,.82), rgba(11,17,32,.9)), url("assets/ambient-desk-night.png") center / cover; opacity: .34; z-index: -2; }
+    .app::after { background: radial-gradient(circle at 50% 0, transparent, transparent 42rem); transition: background .45s ease; z-index: -1; }
+    body[data-mood="positive"] .app::after { background: radial-gradient(circle at 50% 0, rgba(53,211,154,.23), transparent 42rem); }
+    body[data-mood="negative"] .app::after { background: radial-gradient(circle at 50% 0, rgba(255,107,120,.22), transparent 42rem); }
     .topbar {
       align-items: center; border-bottom: 1px solid rgba(255,255,255,.08); display: flex;
       justify-content: space-between; min-height: 68px; padding: 15px 5vw;
@@ -77,6 +85,7 @@
     .setup-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 26px; }
     .field { margin-bottom: 18px; }
     label { color: var(--muted); display: block; font-size: .82rem; font-weight: 700; margin-bottom: 7px; }
+    .optional { color: var(--green); font-size: .72rem; font-weight: 700; }
     input { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; color: var(--text); outline: 0; padding: 12px 13px; width: 100%; }
     input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(78,140,255,.17); }
     .choice-grid { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
@@ -131,9 +140,13 @@
     .odd.neutral { background: #463c19; color: var(--yellow); }
     .odd.bad { background: var(--red-soft); color: var(--red); }
     .feedback { background: linear-gradient(135deg, rgba(78,140,255,.13), rgba(23,36,59,.7)); border: 1px solid rgba(78,140,255,.3); border-radius: 14px; padding: 17px; }
-    .feedback.success { border-color: rgba(53,211,154,.42); }
-    .feedback.loss { border-color: rgba(255,107,120,.45); }
+    .feedback.success { animation: feedback-pop .32s ease both; background: linear-gradient(135deg, rgba(53,211,154,.18), rgba(23,54,49,.76)); border-color: rgba(53,211,154,.56); }
+    .feedback.loss { animation: feedback-shake .32s ease both; background: linear-gradient(135deg, rgba(255,107,120,.18), rgba(67,30,41,.76)); border-color: rgba(255,107,120,.56); }
     .feedback-title { font-size: 1.02rem; font-weight: 850; margin-bottom: 4px; }
+    .feedback.success .feedback-title { color: #d8ffeb; }
+    .feedback.loss .feedback-title { color: #ffd9dd; }
+    body[data-mood="positive"] .game-head h1 { color: #d8ffeb; }
+    body[data-mood="negative"] .game-head h1 { color: #ffd9dd; }
     .feedback p { color: var(--muted); font-size: .84rem; margin: 0 0 14px; }
     .feedback .button { font-size: .8rem; padding: 9px 12px; }
     .bet-animation { align-items: center; display: flex; gap: 9px; margin: 15px 0 3px; overflow: hidden; }
@@ -141,6 +154,8 @@
     .bet-reel:nth-child(2) { animation-delay: .1s; } .bet-reel:nth-child(3) { animation-delay: .2s; }
     .bet-animation small { color: var(--muted); font-size: .78rem; }
     @keyframes reel { from { transform: translateY(-5px) rotate(-4deg); } to { transform: translateY(5px) rotate(4deg); } }
+    @keyframes feedback-pop { from { opacity: .55; transform: scale(.98); } to { opacity: 1; transform: none; } }
+    @keyframes feedback-shake { 0%, 100% { transform: translateX(0); } 35% { transform: translateX(-4px); } 70% { transform: translateX(4px); } }
     .timeline { max-height: 750px; overflow: auto; padding-right: 5px; }
     .history-head { align-items: start; display: flex; justify-content: space-between; margin-bottom: 16px; }
     .history-copy { color: var(--muted); display: block; font-size: .83rem; }
@@ -217,7 +232,7 @@
       .history-card { padding: 8px 11px; } .history-head { align-items: center; margin-bottom: 6px; } .history-card h3 { font-size: .72rem; margin: 0; } .history-copy { display: none; } .timeline { max-height: none; overflow: visible; padding: 0; } .timeline-empty, .event { display: none; } .history-rail { display: grid; gap: 3px; grid-template-columns: repeat(12, minmax(0, 1fr)); } .history-slot { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-size: .52rem; font-weight: 800; line-height: 1; padding: 5px 0; text-align: center; } .history-slot.win { background: var(--green-soft); border-color: rgba(53,211,154,.5); color: var(--green); } .history-slot.loss { background: var(--red-soft); border-color: rgba(255,107,120,.5); color: var(--red); } .history-slot.pending { opacity: .45; }
       .setup-footer, .debrief-actions { align-items: stretch; flex-direction: column; }
     }
-    @media (prefers-reduced-motion: reduce) { .bet-reel { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { body, .app::after { transition: none; } .bet-reel, .feedback { animation: none; } }
   </style>
 </head>
 <body>
@@ -260,13 +275,13 @@
         <div class="setup">
           <div class="setup-head"><div class="eyebrow">Antes de empezar</div><h2>Definí tu punto de partida</h2><p class="lede">No existe una estrategia perfecta. Elegí cómo querés entrar a este semestre.</p></div>
           <div class="setup-card">
-            <div class="field"><label for="playerName">¿Cómo te llamás?</label><input id="playerName" maxlength="24" placeholder="Tu nombre o apodo" autocomplete="off"></div>
+            <div class="field"><label for="playerName">¿Cómo te llamás? <span class="optional">Opcional</span></label><input id="playerName" maxlength="24" placeholder="Tu nombre o apodo (opcional)" autocomplete="off"></div>
             <div class="field"><label>Tu prioridad inicial</label><div class="choice-grid" id="priorityChoices">
               <button class="choice" data-priority="study" aria-pressed="true"><strong>Rendir mejor</strong><span>Empezás con +10% académico</span></button>
               <button class="choice" data-priority="balance" aria-pressed="false"><strong>Buscar equilibrio</strong><span>Empezás con +5% bienestar</span></button>
               <button class="choice" data-priority="risk" aria-pressed="false"><strong>Probar suerte</strong><span>Empezás con $50 extra en mano</span></button>
             </div></div>
-            <div class="setup-footer"><span style="color:var(--muted);font-size:.8rem">Tu saldo inicial será de $1.000 + $200 de ahorro.</span><button class="button primary" id="confirmSetup">Entrar al semestre</button></div>
+            <div class="setup-footer"><span style="color:var(--muted);font-size:.8rem">Podés empezar sin nombre · saldo: $1.000 + $200 de ahorro.</span><button class="button primary" id="confirmSetup">Entrar al semestre</button></div>
           </div>
         </div>
       </section>
@@ -359,9 +374,12 @@
         if (!state.history.length) { timeline.innerHTML = '<div class="timeline-empty">Todavía no hay decisiones registradas.</div>'; return; }
         timeline.innerHTML = state.history.slice().reverse().map((item) => `<div class="event ${item.kind}"><div class="event-top"><span class="event-action">${item.action}</span><span class="event-week">Semana ${item.week}</span></div><div class="event-result ${item.delta >= 0 ? "positive" : "negative"}">${item.result}</div><div class="event-balance">Saldo: ${money(item.wallet)} · Ahorro: ${money(item.savings)}</div></div>`).join("");
       }
-      function setFeedback(title, body, kind = "", allowContinue = true) { const feedback = $("#feedback"); $("#feedbackCard").classList.remove("mobile-hidden"); feedback.className = `feedback ${kind}`; feedback.innerHTML = `<div class="feedback-title">${title}</div><p>${body}</p>${allowContinue ? '<button class="button primary" id="continueButton">Continuar</button>' : ""}`; $("#feedbackHint").textContent = allowContinue ? "La decisión quedó registrada." : "Todavía tenés que elegir una acción."; if (allowContinue) $("#continueButton").addEventListener("click", continueWeek); }
+      function applyMood(kind) { if (kind === "success") document.body.dataset.mood = "positive"; else if (kind === "loss") document.body.dataset.mood = "negative"; else delete document.body.dataset.mood; }
+      function setFeedback(title, body, kind = "", allowContinue = true) { applyMood(kind); const feedback = $("#feedback"); $("#feedbackCard").classList.remove("mobile-hidden"); feedback.className = `feedback ${kind}`; feedback.innerHTML = `<div class="feedback-title">${title}</div><p>${body}</p>${allowContinue ? '<button class="button primary" id="continueButton">Continuar</button>' : ""}`; $("#feedbackHint").textContent = allowContinue ? "La decisión quedó registrada." : "Todavía tenés que elegir una acción."; if (allowContinue) $("#continueButton").addEventListener("click", continueWeek); }
       function showReadyFeedback() { setFeedback("Elegí tu acción principal", "No podés avanzar sin elegir: cada semana registra una decisión.", "", false); $("#feedbackCard").classList.add("mobile-hidden"); }
       function strainInfo() { if (state.risk >= 6) return { study: 5, save: 0, label: "La exposición crítica reduce tu disponibilidad: estudio rinde +5% y ahorrar ya no mejora el bienestar esta semana." }; if (state.risk >= 3) return { study: 10, save: 2, label: "La exposición acumulada fragmenta tu semana: estudio rinde +10% y ahorrar suma +2% de bienestar." }; return { study: 15, save: 5, label: "" }; }
+      const positiveMessages = { study: [["Le diste tiempo al estudio", "La semana quedó mejor preparada para rendir."], ["Sumaste una base académica", "El estudio avanzó antes de que apareciera otra urgencia."]], save: [["Reservaste plata para un imprevisto", "Separaste dinero que puede cubrir una crisis futura."], ["Dejaste un margen", "El ahorro no está disponible hoy, pero queda para cuando haga falta."]], support: [["Frenaste antes de sumar otra apuesta", "Bajaste una marca de exposición y recuperaste tiempo para vos."], ["Pediste apoyo y pausaste", "Esa decisión sumó bienestar y redujo la exposición."]] };
+      function positiveMessage(type) { const messages = positiveMessages[type]; return messages[(state.week - 1) % messages.length]; }
       function chooseAction(action) {
         if (state.pending) return;
         const costs = { study: 250, save: 150, support: 0, bet: 250 };
@@ -371,9 +389,9 @@
         render();
       }
       function addHistory(action, result, delta, kind) { state.history.push({ week: state.week, action, result, delta, wallet: state.wallet, savings: state.savings, kind }); }
-      function resolveStudy() { const strain = strainInfo(); state.wallet -= 250; state.study = clamp(state.study + strain.study, 0, 100); state.wellbeing = clamp(state.wellbeing + (strain.study === 15 ? 5 : 2), 0, 100); addHistory("Invertir en estudio", `−$250 · +${strain.study}% académico`, -250, "win"); tone("success"); setFeedback("Hoy elegiste estudiar", strain.study === 15 ? `Gastaste $250, subiste ${strain.study}% académico y ganaste 5% de bienestar.` : "El estudio sigue disponible, pero la exposición acumulada redujo el beneficio de esta semana.", "success"); }
-      function resolveSave() { const strain = strainInfo(); state.wallet -= 150; state.savings += 150; state.wellbeing = clamp(state.wellbeing + strain.save, 0, 100); addHistory("Ahorrar para emergencias", `−$150 líquidos · +$150 ahorro${strain.save ? ` · +${strain.save}% bienestar` : ""}`, 0, "win"); tone("success"); setFeedback("Sumaste $150 al ahorro", strain.save === 5 ? "El dinero deja de estar disponible hoy y queda reservado para un imprevisto." : "El ahorro sigue disponible para una crisis, aunque esta semana no alivió el malestar.", "success"); }
-      function resolveSupport() { state.risk = Math.max(0, state.risk - 1); state.wellbeing = clamp(state.wellbeing + 8, 0, 100); state.study = clamp(state.study + 3, 0, 100); addHistory("Pedir apoyo y pausar", "+8% bienestar · −1 exposición", 0, "win"); tone("success"); setFeedback("Pausaste y pediste apoyo", "No borra las pérdidas anteriores, pero suma 8% de bienestar y baja una marca de exposición.", "success"); }
+      function resolveStudy() { const strain = strainInfo(), copy = strain.study === 15 ? positiveMessage("study") : ["El estudio sigue disponible", "La exposición acumulada redujo el beneficio de esta semana."]; state.wallet -= 250; state.study = clamp(state.study + strain.study, 0, 100); state.wellbeing = clamp(state.wellbeing + (strain.study === 15 ? 5 : 2), 0, 100); addHistory("Invertir en estudio", `−$250 · +${strain.study}% académico`, -250, "win"); tone("success"); setFeedback(copy[0], `${copy[1]} Gastaste $250, subiste ${strain.study}% académico y ganaste ${strain.study === 15 ? 5 : 2}% de bienestar.`, strain.study === 15 ? "success" : ""); }
+      function resolveSave() { const strain = strainInfo(), copy = strain.save === 5 ? positiveMessage("save") : ["El ahorro sigue disponible", "Esta semana no alivió el malestar por la exposición acumulada."]; state.wallet -= 150; state.savings += 150; state.wellbeing = clamp(state.wellbeing + strain.save, 0, 100); addHistory("Ahorrar para emergencias", `−$150 líquidos · +$150 ahorro${strain.save ? ` · +${strain.save}% bienestar` : ""}`, 0, "win"); tone("success"); setFeedback(copy[0], `${copy[1]} Separaste $150 y tu bienestar cambió +${strain.save}%.`, strain.save === 5 ? "success" : ""); }
+      function resolveSupport() { const copy = positiveMessage("support"); state.risk = Math.max(0, state.risk - 1); state.wellbeing = clamp(state.wellbeing + 8, 0, 100); state.study = clamp(state.study + 3, 0, 100); addHistory("Pedir apoyo y pausar", "+8% bienestar · −1 exposición", 0, "win"); tone("success"); setFeedback(copy[0], `${copy[1]} Sumaste 8% de bienestar y 3% académico.`, "success"); }
       function resolveBet() {
         state.wallet -= 250; state.bets++; state.wagered += 250; state.risk++;
         const roll = Math.random(), roundWeek = state.week;
@@ -407,7 +425,7 @@
       function copySummary() { const net = state.recovered - state.wagered; const text = `BetAware · ${state.name}\nDinero final: ${money(state.wallet)} · Ahorro: ${money(state.savings)}\nApuestas: ${state.wins} ganadas de ${state.bets}\nNeto de apuestas: ${formatSigned(net)}`; navigator.clipboard?.writeText(text).then(() => { $("#copySummary").textContent = "Resumen copiado"; setTimeout(() => $("#copySummary").textContent = "Copiar resumen", 1600); }).catch(() => { $("#copySummary").textContent = "No disponible"; }); }
       let audioContext;
       function tone(type) { try { audioContext ||= new (window.AudioContext || window.webkitAudioContext)(); const now = audioContext.currentTime; const notes = type === "loss" ? [150, 100] : type === "jackpot" ? [440, 660, 880, 1040] : [520, 700]; notes.forEach((frequency, index) => { const oscillator = audioContext.createOscillator(), gain = audioContext.createGain(); oscillator.frequency.value = frequency; oscillator.type = type === "loss" ? "sine" : "triangle"; gain.gain.setValueAtTime(.0001, now + index * .09); gain.gain.exponentialRampToValueAtTime(.07, now + index * .09 + .02); gain.gain.exponentialRampToValueAtTime(.0001, now + index * .09 + .13); oscillator.connect(gain).connect(audioContext.destination); oscillator.start(now + index * .09); oscillator.stop(now + index * .09 + .15); }); } catch (_) {} }
-      function restart() { resetState(); $("#playerName").value = ""; setPriority("study"); $$(".action").forEach((button) => button.disabled = false); $("#feedback").className = "feedback"; showScreen(introScreen); }
+      function restart() { resetState(); applyMood(""); $("#playerName").value = ""; setPriority("study"); $$(".action").forEach((button) => button.disabled = false); $("#feedback").className = "feedback"; showScreen(introScreen); }
       $("#startButton").addEventListener("click", startSetup); $("#confirmSetup").addEventListener("click", startGame); $("#restartButton").addEventListener("click", restart); $("#restartTop").addEventListener("click", restart); $("#copySummary").addEventListener("click", copySummary); $("#modalBackdrop").addEventListener("click", (event) => { if (event.target === $("#modalBackdrop") && !$("#modalBackdrop").dataset.locked) closeModal(); });
       $$("[data-priority]").forEach((button) => button.addEventListener("click", () => setPriority(button.dataset.priority))); $$("[data-action]").forEach((button) => button.addEventListener("click", () => chooseAction(button.dataset.action)));
     })();

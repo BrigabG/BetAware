@@ -39,6 +39,11 @@
     button, input { font: inherit; }
     button { cursor: pointer; }
     button:disabled { cursor: not-allowed; opacity: .48; }
+    button:not(:disabled) { overflow: hidden; position: relative; }
+    button:not(:disabled)::after { background: rgba(255,255,255,.3); border-radius: 50%; content: ""; height: 140%; left: -20%; opacity: 0; pointer-events: none; position: absolute; top: -20%; transform: scale(.2); transition: opacity .28s ease, transform .28s ease; width: 140%; }
+    button:not(:disabled):active { transform: scale(.97); }
+    button:not(:disabled):focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    button.button-hit::after { opacity: .34; transform: scale(1); }
     .hidden { display: none !important; }
     .app { isolation: isolate; min-height: 100vh; position: relative; }
     .app::before, .app::after { content: ""; inset: 0; pointer-events: none; position: fixed; }
@@ -85,12 +90,13 @@
     .setup-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 26px; }
     .field { margin-bottom: 18px; }
     label { color: var(--muted); display: block; font-size: .82rem; font-weight: 700; margin-bottom: 7px; }
-    .optional { color: var(--green); font-size: .72rem; font-weight: 700; }
     input { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; color: var(--text); outline: 0; padding: 12px 13px; width: 100%; }
     input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(78,140,255,.17); }
+    input[aria-invalid="true"] { border-color: var(--red); box-shadow: 0 0 0 3px rgba(255,107,120,.18); }
+    .field-error { color: #ffd0d5; font-size: .78rem; margin: 7px 0 0; }
     .choice-grid { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
-    .choice { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 13px; color: var(--muted); padding: 13px; text-align: left; }
-    .choice[aria-pressed="true"] { background: var(--blue-soft); border-color: var(--blue); color: var(--text); }
+    .choice { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 13px; color: var(--muted); padding: 13px; text-align: left; transition: background .2s, border-color .2s, transform .2s; }
+    .choice[aria-pressed="true"] { animation: choice-select .28s ease both; background: var(--blue-soft); border-color: var(--blue); color: var(--text); }
     .choice strong, .choice span { display: block; }
     .choice strong { margin-bottom: 2px; }
     .choice span { font-size: .78rem; }
@@ -127,6 +133,9 @@
     .action-list { display: grid; gap: 11px; }
     .action { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; color: var(--text); display: grid; gap: 3px; padding: 15px; text-align: left; transition: border-color .2s, transform .2s, background .2s; }
     .action:hover:not(:disabled) { background: #172b4b; border-color: var(--blue); transform: translateY(-2px); }
+    .action.action-selected { animation: action-select .36s ease both; }
+    .action.action-selected[data-action="study"], .action.action-selected[data-action="save"], .action.action-selected[data-action="support"] { border-color: var(--green); box-shadow: 0 0 0 3px rgba(53,211,154,.15); }
+    .action.action-selected[data-action="bet"] { border-color: var(--red); box-shadow: 0 0 0 3px rgba(255,107,120,.15); }
     .action .action-top { align-items: center; display: flex; justify-content: space-between; }
     .action-name { align-items: center; display: flex; gap: 8px; }
     .action-icon { color: var(--blue); font-size: 1.05rem; }
@@ -154,6 +163,8 @@
     .bet-reel:nth-child(2) { animation-delay: .1s; } .bet-reel:nth-child(3) { animation-delay: .2s; }
     .bet-animation small { color: var(--muted); font-size: .78rem; }
     @keyframes reel { from { transform: translateY(-5px) rotate(-4deg); } to { transform: translateY(5px) rotate(4deg); } }
+    @keyframes choice-select { from { transform: scale(.98); } 60% { transform: scale(1.02); } to { transform: none; } }
+    @keyframes action-select { from { transform: scale(.98); } 60% { transform: scale(1.015); } to { transform: none; } }
     @keyframes feedback-pop { from { opacity: .55; transform: scale(.98); } to { opacity: 1; transform: none; } }
     @keyframes feedback-shake { 0%, 100% { transform: translateX(0); } 35% { transform: translateX(-4px); } 70% { transform: translateX(4px); } }
     .timeline { max-height: 750px; overflow: auto; padding-right: 5px; }
@@ -177,7 +188,8 @@
     .consequence-note { background: rgba(246,200,95,.09); border-left: 3px solid var(--yellow); color: #e9d8a3; font-size: .77rem; margin: 13px 0 0; padding: 8px 10px; }
 
     .modal-backdrop { align-items: center; background: rgba(4,8,16,.78); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 20; }
-    .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 25px 90px rgba(0,0,0,.5); max-width: 510px; padding: 25px; width: 100%; }
+    .modal { animation: modal-in .24s ease both; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 25px 90px rgba(0,0,0,.5); max-width: 510px; padding: 25px; width: 100%; }
+    @keyframes modal-in { from { opacity: 0; transform: scale(.97) translateY(8px); } to { opacity: 1; transform: none; } }
     .modal h2 { font-size: 1.6rem; margin-bottom: 10px; }
     .modal p { color: var(--muted); }
     .modal-actions { display: flex; flex-wrap: wrap; gap: 9px; justify-content: flex-end; margin-top: 22px; }
@@ -232,7 +244,7 @@
       .history-card { padding: 8px 11px; } .history-head { align-items: center; margin-bottom: 6px; } .history-card h3 { font-size: .72rem; margin: 0; } .history-copy { display: none; } .timeline { max-height: none; overflow: visible; padding: 0; } .timeline-empty, .event { display: none; } .history-rail { display: grid; gap: 3px; grid-template-columns: repeat(12, minmax(0, 1fr)); } .history-slot { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-size: .52rem; font-weight: 800; line-height: 1; padding: 5px 0; text-align: center; } .history-slot.win { background: var(--green-soft); border-color: rgba(53,211,154,.5); color: var(--green); } .history-slot.loss { background: var(--red-soft); border-color: rgba(255,107,120,.5); color: var(--red); } .history-slot.pending { opacity: .45; }
       .setup-footer, .debrief-actions { align-items: stretch; flex-direction: column; }
     }
-    @media (prefers-reduced-motion: reduce) { body, .app::after { transition: none; } .bet-reel, .feedback { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
@@ -275,13 +287,13 @@
         <div class="setup">
           <div class="setup-head"><div class="eyebrow">Antes de empezar</div><h2>Definí tu punto de partida</h2><p class="lede">No existe una estrategia perfecta. Elegí cómo querés entrar a este semestre.</p></div>
           <div class="setup-card">
-            <div class="field"><label for="playerName">¿Cómo te llamás? <span class="optional">Opcional</span></label><input id="playerName" maxlength="24" placeholder="Tu nombre o apodo (opcional)" autocomplete="off"></div>
+            <div class="field"><label for="playerName">¿Cómo te llamás?</label><input id="playerName" maxlength="24" placeholder="Escribí tu nombre o apodo" autocomplete="off" required aria-describedby="playerNameError"><p class="field-error hidden" id="playerNameError" role="alert">Escribí tu nombre para empezar.</p></div>
             <div class="field"><label>Tu prioridad inicial</label><div class="choice-grid" id="priorityChoices">
               <button class="choice" data-priority="study" aria-pressed="true"><strong>Rendir mejor</strong><span>Empezás con +10% académico</span></button>
               <button class="choice" data-priority="balance" aria-pressed="false"><strong>Buscar equilibrio</strong><span>Empezás con +5% bienestar</span></button>
               <button class="choice" data-priority="risk" aria-pressed="false"><strong>Probar suerte</strong><span>Empezás con $50 extra en mano</span></button>
             </div></div>
-            <div class="setup-footer"><span style="color:var(--muted);font-size:.8rem">Podés empezar sin nombre · saldo: $1.000 + $200 de ahorro.</span><button class="button primary" id="confirmSetup">Entrar al semestre</button></div>
+            <div class="setup-footer"><span style="color:var(--muted);font-size:.8rem">Tu saldo inicial será de $1.000 + $200 de ahorro.</span><button class="button primary" id="confirmSetup">Entrar al semestre</button></div>
           </div>
         </div>
       </section>
@@ -341,7 +353,9 @@
       function setPriority(value) { state.priority = value; $$("[data-priority]").forEach((button) => button.setAttribute("aria-pressed", button.dataset.priority === value ? "true" : "false")); }
       function startSetup() { showScreen(setupScreen); $("#playerName").focus(); }
       function startGame() {
-        state.name = $("#playerName").value.trim() || "Estudiante";
+        const nameInput = $("#playerName"), name = nameInput.value.trim();
+        if (!name) { nameInput.setAttribute("aria-invalid", "true"); $("#playerNameError").classList.remove("hidden"); nameInput.focus(); return; }
+        nameInput.removeAttribute("aria-invalid"); $("#playerNameError").classList.add("hidden"); state.name = name;
         if (state.priority === "study") state.study += 10;
         if (state.priority === "balance") state.wellbeing += 5;
         state.wallet = state.priority === "risk" ? 1050 : 1000;
@@ -384,7 +398,7 @@
         if (state.pending) return;
         const costs = { study: 250, save: 150, support: 0, bet: 250 };
         if (state.wallet < costs[action]) { setFeedback("No alcanza el dinero disponible", `Necesitás ${money(costs[action])} para esa acción. Podés elegir otra estrategia esta semana.`, "loss", false); return; }
-        state.pending = true; $$(".action").forEach((button) => button.disabled = true);
+        state.pending = true; const selected = $(`[data-action="${action}"]`); if (selected) selected.classList.add("action-selected"); $$(".action").forEach((button) => button.disabled = true);
         if (action === "study") resolveStudy(); else if (action === "save") resolveSave(); else if (action === "support") resolveSupport(); else resolveBet();
         render();
       }
@@ -406,7 +420,7 @@
         render();
         if (kind === "loss") openChasingModal();
       }
-      function continueWeek() { if (!state.pending) return; closeModal(); state.pending = false; if (state.week >= 12) { showDebrief(); return; } state.week++; state.wallet += 500; if (state.debt) state.wallet -= Math.min(state.wallet, state.debt); state.debt = Math.max(0, state.debt - 40); $$(".action").forEach((button) => button.disabled = false); render(); showReadyFeedback(); maybeCrisis(); maybeReflectionEvent(); }
+      function continueWeek() { if (!state.pending) return; closeModal(); state.pending = false; if (state.week >= 12) { showDebrief(); return; } state.week++; state.wallet += 500; if (state.debt) state.wallet -= Math.min(state.wallet, state.debt); state.debt = Math.max(0, state.debt - 40); $$(".action").forEach((button) => { button.disabled = false; button.classList.remove("action-selected"); }); render(); showReadyFeedback(); maybeCrisis(); maybeReflectionEvent(); }
       function maybeCrisis() { if ([4, 7, 10].includes(state.week) && Math.random() < .72) { const events = [{ title: "Se rompió tu notebook", body: "La reparación urgente cuesta $350. ¿Cómo vas a resolver este imprevisto?", cost: 350 }, { title: "Bibliografía obligatoria", body: "Para rendir el final necesitás comprar material por $250.", cost: 250 }]; state.currentEvent = events[Math.floor(Math.random() * events.length)]; setTimeout(() => openCrisisModal(), 300); } }
       function maybeReflectionEvent() { const prompts = { 3: ["expectations", "¿Qué beneficios esperás obtener al apostar?"], 6: ["money", state.wagered ? `Hasta ahora apostaste ${money(state.wagered)}. Si hoy tuvieras nuevamente ese dinero, ¿en qué lo usarías?` : "Si hoy tuvieras nuevamente el dinero destinado a apuestas, ¿en qué lo usarías?"], 9: ["cost", state.bets ? "¿Qué cosas dejaste de hacer o de disfrutar debido a las apuestas?" : "¿Qué cosas pueden quedar relegadas cuando apostar ocupa cada vez más tiempo y dinero?"], 11: ["control", "¿Cómo te sentirías si pudieras recuperar el control sobre tus decisiones relacionadas con el juego?"] }; const prompt = prompts[state.week]; if (prompt) setTimeout(() => openReflection(prompt[0], prompt[1], () => {}, state.week >= 9), 250); }
       function openCrisisModal() { const event = state.currentEvent; const canSave = state.savings >= event.cost, canWallet = state.wallet >= event.cost; openModal(`<div class="crisis-icon">!</div><h2 id="modalTitle">${event.title}</h2><p>${event.body}</p><div class="probability-box"><div class="prob-line"><span>Fondo de ahorro</span><strong>${money(state.savings)}</strong></div><div class="prob-line"><span>Dinero disponible</span><strong>${money(state.wallet)}</strong></div></div><div class="modal-actions"><button class="button ghost" id="crisisItem">Vender un ítem</button><button class="button ghost" id="crisisNetwork">Pedir ayuda sin interés</button><button class="button secondary" id="crisisLoan">Préstamo usurero</button><button class="button primary" id="crisisPay" ${canSave || canWallet ? "" : "disabled"}>Pagar ${money(event.cost)}</button></div>`); $("#crisisPay").addEventListener("click", () => resolveCrisis("pay")); $("#crisisLoan").addEventListener("click", () => resolveCrisis("loan")); $("#crisisItem").addEventListener("click", () => resolveCrisis("item")); $("#crisisNetwork").addEventListener("click", () => resolveCrisis("network")); }
@@ -425,8 +439,9 @@
       function copySummary() { const net = state.recovered - state.wagered; const text = `BetAware · ${state.name}\nDinero final: ${money(state.wallet)} · Ahorro: ${money(state.savings)}\nApuestas: ${state.wins} ganadas de ${state.bets}\nNeto de apuestas: ${formatSigned(net)}`; navigator.clipboard?.writeText(text).then(() => { $("#copySummary").textContent = "Resumen copiado"; setTimeout(() => $("#copySummary").textContent = "Copiar resumen", 1600); }).catch(() => { $("#copySummary").textContent = "No disponible"; }); }
       let audioContext;
       function tone(type) { try { audioContext ||= new (window.AudioContext || window.webkitAudioContext)(); const now = audioContext.currentTime; const notes = type === "loss" ? [150, 100] : type === "jackpot" ? [440, 660, 880, 1040] : [520, 700]; notes.forEach((frequency, index) => { const oscillator = audioContext.createOscillator(), gain = audioContext.createGain(); oscillator.frequency.value = frequency; oscillator.type = type === "loss" ? "sine" : "triangle"; gain.gain.setValueAtTime(.0001, now + index * .09); gain.gain.exponentialRampToValueAtTime(.07, now + index * .09 + .02); gain.gain.exponentialRampToValueAtTime(.0001, now + index * .09 + .13); oscillator.connect(gain).connect(audioContext.destination); oscillator.start(now + index * .09); oscillator.stop(now + index * .09 + .15); }); } catch (_) {} }
-      function restart() { resetState(); applyMood(""); $("#playerName").value = ""; setPriority("study"); $$(".action").forEach((button) => button.disabled = false); $("#feedback").className = "feedback"; showScreen(introScreen); }
-      $("#startButton").addEventListener("click", startSetup); $("#confirmSetup").addEventListener("click", startGame); $("#restartButton").addEventListener("click", restart); $("#restartTop").addEventListener("click", restart); $("#copySummary").addEventListener("click", copySummary); $("#modalBackdrop").addEventListener("click", (event) => { if (event.target === $("#modalBackdrop") && !$("#modalBackdrop").dataset.locked) closeModal(); });
+      function restart() { resetState(); applyMood(""); $("#playerName").value = ""; $("#playerName").removeAttribute("aria-invalid"); $("#playerNameError").classList.add("hidden"); setPriority("study"); $$(".action").forEach((button) => button.disabled = false); $("#feedback").className = "feedback"; showScreen(introScreen); }
+      function flashButton(button) { if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; button.classList.remove("button-hit"); void button.offsetWidth; button.classList.add("button-hit"); setTimeout(() => button.classList.remove("button-hit"), 300); }
+      $("#startButton").addEventListener("click", startSetup); $("#confirmSetup").addEventListener("click", startGame); $("#playerName").addEventListener("input", () => { $("#playerName").removeAttribute("aria-invalid"); $("#playerNameError").classList.add("hidden"); }); $("#restartButton").addEventListener("click", restart); $("#restartTop").addEventListener("click", restart); $("#copySummary").addEventListener("click", copySummary); $("#modalBackdrop").addEventListener("click", (event) => { if (event.target === $("#modalBackdrop") && !$("#modalBackdrop").dataset.locked) closeModal(); }); document.addEventListener("click", (event) => { const button = event.target.closest("button:not(:disabled)"); if (button) flashButton(button); });
       $$("[data-priority]").forEach((button) => button.addEventListener("click", () => setPriority(button.dataset.priority))); $$("[data-action]").forEach((button) => button.addEventListener("click", () => chooseAction(button.dataset.action)));
     })();
   </script>

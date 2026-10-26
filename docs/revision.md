@@ -52,11 +52,13 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 17. **Metas concretas.** **Corregido.** Al empezar, el jugador elige una meta de ahorro: entradas a la cancha ($800), zapatillas ($1.200) o viaje de egresados ($2.000). "Ahorrar" pasa a ser "Ahorrar para las zapatillas" (o la meta elegida) y el ahorro muestra cuánto falta. En los imprevistos se elige si pagar con el ahorro o con la billetera. El cierre dice si se llegó a la meta y, si hubo pérdidas, qué parte de la meta se fue en apuestas. "Invertir en estudio" pasó a llamarse "Clases particulares".
 18. **La billetera siempre crecía.** **Corregido.** Con $500 de ingreso y acciones de $250 como mucho, se terminaba con más de $4.000 en la billetera sin llegar a la meta. Con los $250 de gastos fijos, en las pruebas la billetera terminó entre $1.350 y $2.100. Quien ahorra todas las semanas igual suma $100 por semana en la billetera; conviene ver en el playtest si eso confunde.
 19. **Presión de pares.** **Corregido.** En las semanas 2, 5 y 8 escribe el grupo del curso, con mensajes como "Metele que es fija" o un amigo que muestra solo lo que ganó. "Me prendo" apuesta los $250 de esa semana y suma +5% de bienestar; "Paso" resta −3% de bienestar. Cada respuesta queda en el historial y el cierre dice cuántas veces se apostó por el grupo. Conviene revisar con Psicología los textos de los mensajes y el costo de pasar.
+20. **Estímulos de casino.** **Agregado.** La apuesta usa una tragamonedas de tres rodillos que frenan de a uno, con tic-tac y anticipación cuando los dos primeros coinciden. En el 40% de las derrotas el trofeo queda justo arriba de la línea ("casi gano", Clark, 2010). Los premios tienen monedas que vuelan a la billetera, contador, confeti en el premio grande y vibración en el celular. El botón de apostar brilla y muestra la racha. La oferta de doble o nada vence en 10 segundos y el chat del grupo llega mensaje por mensaje. Nada de esto cambia las probabilidades. El cierre no tiene sonido ni efectos. Hay un botón de sonido arriba para usar en el aula, y con "reducir movimiento" activado no hay partículas.
 
 ## Pendientes
 
 ### Texto
 
+- **Peso de los estímulos.** La matriz pide observar si el énfasis audiovisual tapa la lectura del balance. En el playtest conviene anotar si los jugadores leen el neto del cierre y comparar sesiones con sonido y sin sonido.
 - **Duración de las pausas.** Se cierran solas a los 7 o 9 segundos. Conviene medir en el playtest si alcanza para leer.
 
 ### Para el playtest y la evaluación (OE 3 y OE 4)

@@ -7,5 +7,6 @@ Para todo texto visible en `index.html` y documentación del juego, aplicar la g
 - No usar frases grandilocuentes, contrastes dramáticos vacíos ni moralejas que le digan al jugador qué debe sentir.
 - Conservar un tono respetuoso: el juego describe una simulación, no diagnostica ni ofrece tratamiento clínico.
 - Mantener las cifras, probabilidades, fuentes y recursos de ayuda verificables.
+- Mantener cada pantalla simple: mostrar el dato (probabilidad, monto, promedio) en una línea y dejar que el jugador saque la conclusión. No explicar lo mismo en cada pantalla ni convertir el juego en una lección; no debe sonar a sermón.
 
 Referencia: https://github.com/petergyang/no-ai-slop

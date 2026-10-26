@@ -37,7 +37,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
    - Se sacó "Presupuesto libre", que mostraba la billetera menos $500 sin explicar por qué.
    - En el cierre, "Necesidades académicas" pasó a ser "Estudio", y "Total recuperado" pasó a ser "Total cobrado", como en el informe.
 4. **El cierre no mostraba la trayectoria completa.** **Corregido.** El cierre ahora lista todas las semanas en orden, incluidos los imprevistos y cómo se pagaron. Antes los imprevistos no quedaban en el historial.
-5. **Ingreso semanal.** **A medias: falta una decisión del grupo.** El informe (OE 2 y 5.2) dice "$1.000 semanales". El juego da $1.000 al inicio y $500 por semana. Por ahora el juego lo dice claramente en la configuración y en la tarjeta de decisiones. Si se adopta $1.000 por semana, con gastos de $150 a $250 la plata se acumula y los imprevistos pierden peso. Recomendación: mantener $500 y corregir el informe.
+5. **Ingreso semanal.** **Corregido en el juego; falta actualizar el informe.** El grupo decidió: $500 de ingreso por semana y $250 de gastos fijos (viáticos y comida). Quedan $250 libres por semana, justo para una acción. El informe (OE 2 y 5.2) todavía dice "$1.000 semanales" y hay que cambiarlo.
 6. **Los imprevistos se podían esquivar.** **Corregido.** Un clic fuera del modal lo cerraba sin pagar. Ahora hay que elegir una opción.
 7. **Botón "Continuar" sin efecto después de un imprevisto.** **Corregido.** Antes de elegir la acción de la semana aparecía un botón que no hacía nada.
 8. **El mensaje del imprevisto mentía.** **Corregido.** Decía "el ahorro funcionó" aunque se hubiera pagado con la billetera.
@@ -50,6 +50,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 15. **Pausas que suponían un problema.** **Corregido.** La semana 11 ahora pregunta "Si arrancaras de nuevo, ¿apostarías igual?" a quien apostó, y "¿Qué te llevaría a apostar?" a quien no. Las versiones sin apuestas de las semanas 6 y 9 también son más directas. Conviene revisar estas preguntas con el equipo de Psicología.
 16. **Deuda mal descontada.** **Corregido.** Cada semana se descontaba de la billetera toda la deuda, pero la deuda bajaba solo $40. Ahora la deuda se paga entera con el ingreso de la semana siguiente (si no alcanza, se paga lo que haya y el resto queda para la otra semana). El pago queda en el historial, la deuda se ve en el estado mientras exista y, si queda algo al final, aparece en el cierre.
 17. **Metas concretas.** **Corregido.** Al empezar, el jugador elige una meta de ahorro: entradas a la cancha ($800), zapatillas ($1.200) o viaje de egresados ($2.000). "Ahorrar" pasa a ser "Ahorrar para las zapatillas" (o la meta elegida) y el ahorro muestra cuánto falta. En los imprevistos se elige si pagar con el ahorro o con la billetera. El cierre dice si se llegó a la meta y, si hubo pérdidas, qué parte de la meta se fue en apuestas. "Invertir en estudio" pasó a llamarse "Clases particulares".
+18. **La billetera siempre crecía.** **Corregido.** Con $500 de ingreso y acciones de $250 como mucho, se terminaba con más de $4.000 en la billetera sin llegar a la meta. Con los $250 de gastos fijos, en las pruebas la billetera terminó entre $1.350 y $2.100. Quien ahorra todas las semanas igual suma $100 por semana en la billetera; conviene ver en el playtest si eso confunde.
 
 ## Pendientes
 
@@ -61,10 +62,6 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 
 - **Duración de las pausas.** Se cierran solas a los 7 o 9 segundos. Conviene medir en el playtest si alcanza para leer.
 
-### La billetera siempre crece (falta decidir)
-
-- Entran $500 por semana y cada acción cuesta $250 como mucho, así que la billetera crece todas las semanas. En las pruebas se terminó con más de $4.000 en la billetera sin llegar a la meta, y en los imprevistos no tiene sentido vender algo o pedir un préstamo con $1.950 disponibles. El presupuesto no se siente finito, como pide el OE 2. Se resuelve junto con la decisión del ingreso semanal.
-
 ### Para el playtest y la evaluación (OE 3 y OE 4)
 
 - **Registro de la sesión.** La matriz pide registrar elección, tiempo, abandono, finalización y duración. El juego solo permite copiar un resumen. Como no hay servidor, se puede agregar una descarga en CSV o JSON para el facilitador.
@@ -74,4 +71,4 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 ### En los documentos
 
 - **Plataforma.** El análisis transmedia propone una "versión web jugable (Unity WebGL)", pero el prototipo ya es web y está hecho en HTML, CSS y JavaScript, sin Unity.
-- **Ingreso semanal.** Alinear el informe o el juego (ver el punto 5).
+- **Ingreso semanal.** Cambiar "$1.000 semanales" por "$500 por semana con $250 de gastos fijos" en el OE 2 y en la sección 5.2 (ver el punto 5).

@@ -39,20 +39,17 @@ Cada punto indica si quedó **corregido** en esta rama o si sigue **pendiente**.
 6. **Los imprevistos se podían esquivar.** **Corregido.** Un clic fuera del modal lo cerraba sin pagar. Ahora hay que elegir una opción.
 7. **Botón "Continuar" sin efecto después de un imprevisto.** **Corregido.** Antes de elegir la acción de la semana aparecía un botón que no hacía nada.
 8. **El mensaje del imprevisto mentía.** **Corregido.** Decía "el ahorro funcionó" aunque se hubiera pagado con la billetera.
+9. **Frecuencias junto a los porcentajes.** **Corregido.** La apuesta muestra "1 de cada 10", "2 de cada 10" y "7 de cada 10" debajo de cada porcentaje, y el doble o nada dice "Ganás 1 de cada 2 veces".
+10. **Pregunta sobre la memoria.** **Corregido.** Antes del cierre, con las pantallas del juego ocultas, se pregunta cuántas apuestas cree el jugador que ganó. Puede elegir no responder y la respuesta no puntúa. Después el cierre muestra lo que creía, lo que realmente ganó y la pregunta "¿Qué recordabas mejor: las ganancias o las pérdidas?".
+11. **Resultado esperado en el cierre.** **Corregido.** El cierre ahora muestra el resultado esperado según la cantidad de apuestas en el partido (−$105 por apuesta), aclara que el doble o nada tiene esperanza $0 y compara el resultado de la partida con ese promedio. Si la partida termina con ganancia, explica que no cambia las chances. Si no hubo apuestas, muestra lo que se habría esperado con 12 apuestas (−$1.260).
+12. **Tono del cierre.** **Corregido.** Se sacó el título "La memoria recuerda la euforia. La planilla recuerda todo.", un contraste dramático que la guía de `AGENTS.md` pide evitar. Ahora el título dice cuántas apuestas se ganaron y el recuadro cambia de rojo a azul cuando el neto no es negativo.
 
 ## Pendientes
 
 ### Del backlog de la Sprint Review
 
-- **Frecuencias junto a los porcentajes.** Mostrar "7 de cada 10 veces perdés", "2 de cada 10 ganás $100" y "1 de cada 10 ganás $500".
 - **Metas concretas.** Cambiar "estudiar" y "ahorrar" por metas de un adolescente: zapatillas, una salida, entradas a la cancha, el viaje de egresados.
 - **Presión de pares.** Agregar mensajes de amigos ("metele que es fija") que empujen a apostar. Los stakeholders la marcaron como la motivación principal del jugador y el análisis transmedia propone un chat tipo WhatsApp.
-
-### Del cierre (Informe 5.7, matriz y análisis transmedia)
-
-- **Pregunta sobre la memoria.** Falta "¿Qué recordabas mejor: las ganancias o las pérdidas?". Una forma de medirlo: antes de mostrar los números, preguntar cuántas apuestas cree el jugador que ganó, y después mostrar el número real.
-- **Partidas que terminan con ganancia.** Mostrar el resultado esperado según la cantidad de apuestas, por ejemplo "con 5 apuestas, el promedio esperado era −$525", para separar el resultado de una partida de la esperanza matemática.
-- **Tono del cierre.** El título "La memoria recuerda la euforia. La planilla recuerda todo." es un contraste dramático que la guía de escritura del repo (`AGENTS.md`) pide evitar.
 
 ### Texto y vocabulario
 

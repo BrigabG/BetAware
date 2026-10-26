@@ -51,12 +51,12 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 16. **Deuda mal descontada.** **Corregido.** Cada semana se descontaba de la billetera toda la deuda, pero la deuda bajaba solo $40. Ahora la deuda se paga entera con el ingreso de la semana siguiente (si no alcanza, se paga lo que haya y el resto queda para la otra semana). El pago queda en el historial, la deuda se ve en el estado mientras exista y, si queda algo al final, aparece en el cierre.
 17. **Metas concretas.** **Corregido.** Al empezar, el jugador elige una meta de ahorro: entradas a la cancha ($800), zapatillas ($1.200) o viaje de egresados ($2.000). "Ahorrar" pasa a ser "Ahorrar para las zapatillas" (o la meta elegida) y el ahorro muestra cuánto falta. En los imprevistos se elige si pagar con el ahorro o con la billetera. El cierre dice si se llegó a la meta y, si hubo pérdidas, qué parte de la meta se fue en apuestas. "Invertir en estudio" pasó a llamarse "Clases particulares".
 18. **La billetera siempre crecía.** **Corregido.** Con $500 de ingreso y acciones de $250 como mucho, se terminaba con más de $4.000 en la billetera sin llegar a la meta. Con los $250 de gastos fijos, en las pruebas la billetera terminó entre $1.350 y $2.100. Quien ahorra todas las semanas igual suma $100 por semana en la billetera; conviene ver en el playtest si eso confunde.
+19. **Presión de pares.** **Corregido.** En las semanas 2, 5 y 8 escribe el grupo del curso, con mensajes como "Metele que es fija" o un amigo que muestra solo lo que ganó. "Me prendo" apuesta los $250 de esa semana y suma +5% de bienestar; "Paso" resta −3% de bienestar. Cada respuesta queda en el historial y el cierre dice cuántas veces se apostó por el grupo. Conviene revisar con Psicología los textos de los mensajes y el costo de pasar.
 
 ## Pendientes
 
 ### Del backlog de la Sprint Review
 
-- **Presión de pares.** Agregar mensajes de amigos ("metele que es fija") que empujen a apostar. Los stakeholders la marcaron como la motivación principal del jugador y el análisis transmedia propone un chat tipo WhatsApp.
 
 ### Texto
 

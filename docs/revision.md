@@ -49,17 +49,21 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 14. **Vocabulario de universidad.** **Corregido.** Se cambiaron "cuatrimestre", "semestre", "finales", "liquidez" y "bibliografía" por textos de secundaria.
 15. **Pausas que suponían un problema.** **Corregido.** La semana 11 ahora pregunta "Si arrancaras de nuevo, ¿apostarías igual?" a quien apostó, y "¿Qué te llevaría a apostar?" a quien no. Las versiones sin apuestas de las semanas 6 y 9 también son más directas. Conviene revisar estas preguntas con el equipo de Psicología.
 16. **Deuda mal descontada.** **Corregido.** Cada semana se descontaba de la billetera toda la deuda, pero la deuda bajaba solo $40. Ahora la deuda se paga entera con el ingreso de la semana siguiente (si no alcanza, se paga lo que haya y el resto queda para la otra semana). El pago queda en el historial, la deuda se ve en el estado mientras exista y, si queda algo al final, aparece en el cierre.
+17. **Metas concretas.** **Corregido.** Al empezar, el jugador elige una meta de ahorro: entradas a la cancha ($800), zapatillas ($1.200) o viaje de egresados ($2.000). "Ahorrar" pasa a ser "Ahorrar para las zapatillas" (o la meta elegida) y el ahorro muestra cuánto falta. En los imprevistos se elige si pagar con el ahorro o con la billetera. El cierre dice si se llegó a la meta y, si hubo pérdidas, qué parte de la meta se fue en apuestas. "Invertir en estudio" pasó a llamarse "Clases particulares".
 
 ## Pendientes
 
 ### Del backlog de la Sprint Review
 
-- **Metas concretas.** Cambiar "estudiar" y "ahorrar" por metas de un adolescente: zapatillas, una salida, entradas a la cancha, el viaje de egresados.
 - **Presión de pares.** Agregar mensajes de amigos ("metele que es fija") que empujen a apostar. Los stakeholders la marcaron como la motivación principal del jugador y el análisis transmedia propone un chat tipo WhatsApp.
 
 ### Texto
 
 - **Duración de las pausas.** Se cierran solas a los 7 o 9 segundos. Conviene medir en el playtest si alcanza para leer.
+
+### La billetera siempre crece (falta decidir)
+
+- Entran $500 por semana y cada acción cuesta $250 como mucho, así que la billetera crece todas las semanas. En las pruebas se terminó con más de $4.000 en la billetera sin llegar a la meta, y en los imprevistos no tiene sentido vender algo o pedir un préstamo con $1.950 disponibles. El presupuesto no se siente finito, como pide el OE 2. Se resuelve junto con la decisión del ingreso semanal.
 
 ### Para el playtest y la evaluación (OE 3 y OE 4)
 

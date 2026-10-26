@@ -12,4 +12,4 @@ Los íconos se integran como SVG propios, adaptados de [Lucide](https://lucide.d
 
 La experiencia toma como referencia la estructura de simulador por turnos de [Copero](https://copero.com.ar/juegos/simulador-carrera): una introducción breve, una configuración inicial y una secuencia de decisiones con trayectoria acumulada. La interfaz, el texto y las reglas son propios de BetAware.
 
-La economía muestra una esperanza matemática negativa: cada apuesta de $250 tiene un retorno esperado de $160, por lo que la pérdida esperada es de $90 por intento.
+La economía muestra una esperanza matemática negativa: cada apuesta de $250 tiene un cobro esperado de $145 (0,10 × $750 + 0,20 × $350), por lo que la pérdida esperada es de $105 por intento. La oferta de "doble o nada" tiene esperanza cero y el juego lo explica en pantalla.

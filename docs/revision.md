@@ -55,9 +55,6 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 
 ## Pendientes
 
-### Del backlog de la Sprint Review
-
-
 ### Texto
 
 - **Duración de las pausas.** Se cierran solas a los 7 o 9 segundos. Conviene medir en el playtest si alcanza para leer.

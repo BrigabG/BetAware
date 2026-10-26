@@ -48,6 +48,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 13. **Pantallas que explicaban de más.** **Corregido.** Los mensajes después de cada acción, apuesta, doble o nada e imprevisto ahora tienen un título corto y los números. Se sacaron frases como "Ahora puede aparecer la idea de recuperarlos rápido", "La exposición acumulada fragmenta tu semana" o "Frenaste antes de sumar otra apuesta" (que aparecía aunque el jugador nunca hubiera apostado). La intro también quedó más corta.
 14. **Vocabulario de universidad.** **Corregido.** Se cambiaron "cuatrimestre", "semestre", "finales", "liquidez" y "bibliografía" por textos de secundaria.
 15. **Pausas que suponían un problema.** **Corregido.** La semana 11 ahora pregunta "Si arrancaras de nuevo, ¿apostarías igual?" a quien apostó, y "¿Qué te llevaría a apostar?" a quien no. Las versiones sin apuestas de las semanas 6 y 9 también son más directas. Conviene revisar estas preguntas con el equipo de Psicología.
+16. **Deuda mal descontada.** **Corregido.** Cada semana se descontaba de la billetera toda la deuda, pero la deuda bajaba solo $40. Ahora la deuda se paga entera con el ingreso de la semana siguiente (si no alcanza, se paga lo que haya y el resto queda para la otra semana). El pago queda en el historial, la deuda se ve en el estado mientras exista y, si queda algo al final, aparece en el cierre.
 
 ## Pendientes
 
@@ -59,10 +60,6 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 ### Texto
 
 - **Duración de las pausas.** Se cierran solas a los 7 o 9 segundos. Conviene medir en el playtest si alcanza para leer.
-
-### Bug de la deuda (falta decidir la cuota)
-
-- Cada semana el juego descuenta de la billetera **toda** la deuda, pero la deuda baja solo $40. Un préstamo de $472 te puede sacar $472 por semana durante varias semanas. Hay que elegir una de dos reglas: pagar la deuda entera con el ingreso siguiente, o pagar una cuota fija (por ejemplo, $100) y descontar de la deuda lo mismo que se cobra. Además, la deuda no se ve en el estado ni en el cierre.
 
 ### Para el playtest y la evaluación (OE 3 y OE 4)
 

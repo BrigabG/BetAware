@@ -22,7 +22,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 | Apuesta: 10% de +$500 netos, 20% de +$100 y 70% de −$250; cobros de $750, $350 y $0 | Informe 5.3, matriz | Cumple |
 | Chances fijas e independientes, que no cambian con las rachas | Sprint Review, matriz | Cumple: cada apuesta sortea de nuevo |
 | Indicadores de billetera, ahorro, estudio, bienestar y exposición | Informe 5.6 | Cumple |
-| Imprevistos que se cubren con el ahorro (notebook de $350) | Informe 5.5 | Cumple, con opciones extra: préstamo, vender un ítem o ayuda sin interés |
+| Imprevistos que se cubren con el ahorro (notebook de $350) | Informe 5.5 | Cumple: se paga con el ahorro, con la billetera o pidiendo prestado |
 | "Doble o nada" después de perder, con opción de cerrar o separar plata | Matriz | Cumple |
 | Pausas en las semanas 3, 6, 9 y 11, sin puntuar respuestas, con referencia a la Línea 141 | Sprint Review, matriz | Cumple |
 | Historial que no se borra | Informe 5.6 | Cumple |
@@ -53,6 +53,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 18. **La billetera siempre crecía.** **Corregido.** Con $500 de ingreso y acciones de $250 como mucho, se terminaba con más de $4.000 en la billetera sin llegar a la meta. Con los $250 de gastos fijos, en las pruebas la billetera terminó entre $1.350 y $2.100. Quien ahorra todas las semanas igual suma $100 por semana en la billetera; conviene ver en el playtest si eso confunde.
 19. **Presión de pares.** **Corregido.** En las semanas 2, 5 y 8 escribe el grupo del curso, con mensajes como "Metele que es fija" o un amigo que muestra solo lo que ganó. "Me prendo" apuesta los $250 de esa semana y suma +5% de bienestar; "Paso" resta −3% de bienestar. Cada respuesta queda en el historial y el cierre dice cuántas veces se apostó por el grupo. Conviene revisar con Psicología los textos de los mensajes y el costo de pasar.
 20. **Estímulos de casino.** **Agregado.** La apuesta usa una tragamonedas de tres rodillos que frenan de a uno, con tic-tac y anticipación cuando los dos primeros coinciden. En el 40% de las derrotas el trofeo queda justo arriba de la línea ("casi gano", Clark, 2010). Los premios tienen monedas que vuelan a la billetera, contador, confeti en el premio grande y vibración en el celular. El botón de apostar brilla y muestra la racha. La oferta de doble o nada vence en 10 segundos y el chat del grupo llega mensaje por mensaje. Nada de esto cambia las probabilidades. El cierre no tiene sonido ni efectos. Hay un botón de sonido arriba para usar en el aula, y con "reducir movimiento" activado no hay partículas.
+21. **Imprevistos con demasiadas opciones.** **Corregido.** Había cinco botones sin costo a la vista, "Pedir ayuda sin interés" siempre convenía más que el préstamo y "préstamo usurero" era una palabra difícil. Ahora hay tres opciones y cada una dice cuánto cuesta: "Pagar con el ahorro" (−$350 · te faltarían $500 para la cancha), "Pagar con la billetera" (−$350 · te quedarían $650) y "Pedir prestado" (devolvés $473 la semana que viene: $123 más de lo que te prestaron). Si no alcanza, el botón aparece apagado con "No te alcanza: tenés $200". Se sacaron "Vender un ítem" y "Pedir ayuda sin interés".
 
 ## Pendientes
 

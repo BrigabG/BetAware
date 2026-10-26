@@ -17,7 +17,7 @@ Los valores del juego que usan estos textos:
 | Pedir apoyo y pausar | Sin costo · +8% bienestar · +3% estudio · −1 exposición |
 | Apostar en el partido | $250 · 10% +$500 netos · 20% +$100 netos · 70% −$250 · pérdida esperada $105 |
 | Doble o nada | $300 · 50% +$300 · 50% −$300 · esperanza $0 · la oferta dura 10 segundos |
-| Imprevistos | Semanas 4, 7 y 10 (72% de probabilidad): notebook $350 o material $250 |
+| Imprevistos | Semanas 4, 7 y 10 (72% de probabilidad): notebook $350 o material $250 · se pagan con el ahorro, con la billetera o pidiendo prestado (se devuelve un 35% más) |
 | Mensajes del grupo | Semanas 2, 5 y 8 · "Me prendo" +5% bienestar y apuesta · "Paso" −3% bienestar |
 | Pausas de reflexión | Semanas 3, 6, 9 y 11 · Línea 141 en las semanas 9 y 11 |
 
@@ -94,7 +94,7 @@ Si se agrega esta sección, las siguientes pasan a ser 5.7 y 5.8.
 > • Persecución de Pérdidas: El evento de volver a apostar después de perder permite representar el intento de recuperar dinero mediante una nueva apuesta (Clark, 2010). La oferta «doble o nada» no garantiza recuperar lo perdido. Su esperanza nula, señalada en la Sprint Review, deberá explicarse y distinguirse de la apuesta principal de esperanza negativa; la claridad de esa diferencia es una corrección pendiente del prototipo.
 
 **Propuesto:**
-> • Resolución del Imprevisto: El usuario elige cómo pagarlo: con el ahorro, lo que lo aleja de su meta; con la billetera; vendiendo algo propio, con pérdida de bienestar y estudio; pidiendo ayuda sin interés; o con un préstamo usurero, con un 35% de recargo. Las deudas se descuentan del ingreso de la semana siguiente.
+> • Resolución del Imprevisto: El usuario elige entre tres opciones y cada una muestra su costo antes de elegir: pagar con el ahorro, lo que lo aleja de su meta; pagar con la billetera; o pedir prestado y devolver un 35% más con el ingreso de la semana siguiente (por un imprevisto de $350, devuelve $473). Si el dinero no alcanza, la opción aparece desactivada.
 >
 > • Persecución de Pérdidas: El evento de volver a apostar después de perder permite representar el intento de recuperar dinero mediante una nueva apuesta (Clark, 2010). La oferta «doble o nada» no garantiza recuperar lo perdido. Tiene esperanza nula y el juego lo muestra como «En promedio: $0», separado de la apuesta principal, de esperanza negativa. La oferta vence en 10 segundos, como las cuotas especiales de las aplicaciones de apuestas.
 
@@ -146,7 +146,7 @@ El párrafo «Resumen Financiero» puede quedar igual.
 ### Fila "Imprevistos y persecución de pérdidas"
 
 **Mecánicas, actual:** Gastos inesperados; tras perder, oferta de apostar de nuevo, cerrar o separar dinero.
-**Mecánicas, propuesto:** Gastos inesperados que se pagan con ahorro, billetera, venta, ayuda o préstamo; tras perder, oferta de doble o nada por 10 segundos, con opción de cerrarla o separar dinero.
+**Mecánicas, propuesto:** Gastos inesperados que se pagan con el ahorro, con la billetera o pidiendo prestado; tras perder, oferta de doble o nada por 10 segundos, con opción de cerrarla o separar dinero.
 
 **Iteraciones, actual:** Revisar texto y balance; explicar el «doble o nada» de esperanza nula y distinguirlo de la apuesta principal de esperanza negativa.
 **Iteraciones, propuesto:** Hecho: la oferta muestra «En promedio: $0», separada de la apuesta principal.

@@ -31,7 +31,7 @@ https://brigabg.github.io/BetAware/?registro=URL_DEL_SCRIPT
 
 Jugar una semana y mirar la planilla: tienen que aparecer filas en **eventos**.
 
-**Para que quede fijo**, la URL va en `index.html`, en la línea `const REGISTRO_URL = "";`. Desde ahí, el link normal registra todas las partidas.
+**Para que quede fijo**, la URL va en `index.html`, en la línea `const REGISTRO_URL = "…";`. Desde ahí, el link normal registra todas las partidas. Desde el 16/11/2026 el juego ya tiene cargada la URL del script del grupo.
 
 **Si después se cambia el script:** **Implementar → Gestionar implementaciones** → lápiz → Versión: **Nueva versión** → **Implementar**. La URL no cambia.
 

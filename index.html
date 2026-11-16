@@ -631,7 +631,7 @@
         } catch (_) {}
       }
       // Registro de partidas: cada evento se guarda en este navegador y se envía al Apps Script (docs/registro-google-sheets.md).
-      const REGISTRO_URL = "";
+      const REGISTRO_URL = "https://script.google.com/macros/s/AKfycbw29_vlbL-vUQEcwGNI50rNLHVtG-v0e7Z4r44IxPhie6fDORAhU-MQsQnf8UvDe5WKzQ/exec";
       const VERSION = "2026-11-16";
       const params = new URLSearchParams(location.search), registroUrl = params.get("registro") || REGISTRO_URL;
       const logColumns = ["id", "fecha", "sesion", "codigo", "evento", "semana", "accion", "valor", "segundos", "billetera", "ahorro", "estudio", "bienestar", "exposicion", "deuda", "detalle", "version"];

@@ -29,7 +29,9 @@ function doPost(e) {
     if (nuevos.length) {
       const hoja = obtenerHoja();
       const ahora = new Date();
-      hoja.getRange(hoja.getLastRow() + 1, 1, nuevos.length, COLUMNAS.length).setValues(nuevos.map((evento) => aFila(evento, ahora)));
+      const fila = hoja.getLastRow() + 1;
+      hoja.getRange(fila, 1, nuevos.length, COLUMNAS.length).setValues(nuevos.map((evento) => aFila(evento, ahora)));
+      hoja.getRange(fila, 2, nuevos.length, 2).setNumberFormat("dd/mm/yyyy hh:mm:ss"); // recibido y fecha, con hora
       cache.putAll(Object.fromEntries(nuevos.map((evento) => [evento.id, "1"])), SEGUNDOS_CACHE);
     }
     return respuesta({ ok: true, guardados: nuevos.length, repetidos: recibidos.length - nuevos.length });

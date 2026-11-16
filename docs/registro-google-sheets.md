@@ -86,6 +86,9 @@ Cada fila es un evento.
 
 ## Cómo leerlo
 
+El menú **BetAware → Actualizar resumen** de la planilla arma las pestañas **partidas** e **indicadores**. Qué significa cada indicador y en qué sección del TP va: [`interpretacion-metricas.md`](interpretacion-metricas.md).
+
+
 - **Abandono:** una sesión sin `cierre`. La última fila dice en qué semana quedó.
 - **Lo declarado frente a lo decidido:** filtrar por `codigo` y comparar con el cuestionario. Por ejemplo, quien rechaza la falacia del apostador en el pretest y después responde `acepto` en `doble_o_nada`.
 - **Memoria:** en `cierre`, comparar `creia` con `ganadas`.

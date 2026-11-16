@@ -64,7 +64,7 @@ Criterio de texto: cada pantalla muestra el dato en una línea y deja que el jug
 
 ### Para el playtest y la evaluación (OE 3 y OE 4)
 
-- **Registro de la sesión.** La matriz pide registrar elección, tiempo, abandono, finalización y duración. El juego solo permite copiar un resumen. Como no hay servidor, se puede agregar una descarga en CSV o JSON para el facilitador.
+- **Registro de la sesión.** **Hecho; falta publicar el script.** Cada partida manda sus eventos a Google Sheets con un Apps Script (`apps-script/Code.gs`): decisiones, tiempos, apuestas, respuestas al grupo y a la oferta, imprevistos, pausas, memoria, cierre y abandono, con código de participante opcional. Sin internet, los eventos quedan en el navegador y se reintentan; también se pueden descargar en CSV. Falta publicar el script desde la cuenta del grupo y poner su URL en `index.html`. Paso a paso en `registro-google-sheets.md`.
 - **Instrumentos.** No están en el repo el cuestionario pretest/postest, el protocolo de playtest ni el kit docente. El análisis transmedia ubica el kit como la extensión más factible.
 - **Línea 141.** Confirmar en la fuente oficial de SEDRONAR que atiende consultas por apuestas, y citarla. La [guía educativa del GCBA sobre apuestas online (2026)](https://static.buenosaires.gob.ar/sites/default/files/2026-06/Apuestas_online_guia_educativa.pdf) recuerda que el juego de azar está prohibido para menores de 18. El juego podría mencionarlo.
 
